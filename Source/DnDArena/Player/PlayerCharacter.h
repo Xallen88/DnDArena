@@ -4,8 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-//#include "./Buffs/BuffSystem.h"
+#include "./Buffs/BuffSystem.h"
 #include "PlayerCharacter.generated.h"
+
 
 UCLASS()
 class DNDARENA_API APlayerCharacter : public ACharacter
@@ -27,10 +28,10 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-public:
-	//UBuffSystem StatusEffectComponent;
-
-
+	
 private:
 	
+
+public:
+	UBuffSystem* GetBuffSystem();
 };

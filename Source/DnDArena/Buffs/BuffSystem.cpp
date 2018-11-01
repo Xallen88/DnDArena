@@ -4,7 +4,7 @@
 #include "TimerManager.h"
 #include "./Player/ControllerBase.h"
 #include "./Player/PlayerHUD.h"
-//#include "./Player/PlayerCharacter.h"
+#include "./Player/PlayerCharacter.h"
 #include "Engine/Classes/GameFramework/CharacterMovementComponent.h"
 
 
@@ -15,7 +15,12 @@ UBuffSystem::UBuffSystem()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
-	// ...
+	StunStacks = 0;
+	DisarmStacks = 0;
+	SilenceStacks = 0;
+	InvulnerableStacks = 0;
+
+
 }
 
 

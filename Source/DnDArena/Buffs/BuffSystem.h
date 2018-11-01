@@ -6,11 +6,9 @@
 #include "Components/ActorComponent.h"
 #include "Buff.h"
 #include "BuffWidget.h"
-#include "./Player/PlayerCharacter.h"
 #include "BuffSystem.generated.h"
 
-//class APlayerCharacter;
-
+class APlayerCharacter;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent), BlueprintType)
 class DNDARENA_API UBuffSystem : public UActorComponent
@@ -29,35 +27,17 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-//My code
-public:
-	// Called when buff is being created/refreshed
-	UFUNCTION(BlueprintCallable, Category = "Buff", Server, Reliable, WithValidation)
-		void ServerAttachBuff(FName BuffName);
 
-	UFUNCTION(BlueprintCallable)
-		bool isStunned();
+private:	
+	UPROPERTY(EditAnywhere, Category = "Buff Data")
+		UDataTable* BuffData;
 
-	UFUNCTION(BlueprintCallable)
-		bool isSilenced();
-
-	UFUNCTION(BlueprintCallable)
-		bool isDisarmed();
-
-	UFUNCTION(BlueprintCallable)
-		bool isInvulnerable();
-
-private:
-	
 	int32 StunStacks;
 	int32 SilenceStacks;
 	int32 DisarmStacks;
 	int32 InvulnerableStacks;
 	
 	TMap<FName, FBuff> Buffs;
-
-	UPROPERTY(EditAnywhere)
-		UDataTable* BuffData;
 
 	UFUNCTION()
 	void DeleteBuff(FName BuffName);
@@ -91,4 +71,21 @@ private:
 
 	void InvulnerabilityEffect(bool bApply);
 
+
+public:
+	// Called when buff is being created/refreshed
+	UFUNCTION(BlueprintCallable, Category = "Buff", Server, Reliable, WithValidation)
+		void ServerAttachBuff(FName BuffName);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		bool isStunned();
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		bool isSilenced();
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		bool isDisarmed();
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		bool isInvulnerable();
 };
