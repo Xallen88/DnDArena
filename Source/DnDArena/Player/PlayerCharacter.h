@@ -5,11 +5,21 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "./Buffs/BuffSystem.h"
+#include "AbilitySystemInterface.h"
 #include "PlayerCharacter.generated.h"
+
+class UAbilitySystemComponent;
+class UGameplayAbility;
+
+UENUM() 
+enum class AbilityInput : uint8
+{
+	WeaponAttack2 UMETA(DisplayName = "TestSpell")
+};
 
 
 UCLASS()
-class DNDARENA_API APlayerCharacter : public ACharacter
+class DNDARENA_API APlayerCharacter : public ACharacter, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 
@@ -28,10 +38,17 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	// Extended of PossessedBy to include GameplayAbility setttings
+	void PossessedBy(AController* NewController) override;
+
 	
 private:
-	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Abilities, meta = (AllowPrivateAccess = "true"))
+		UAbilitySystemComponent* AbilitySystem;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Abilities, meta = (AllowPrivateAccess = "true"))
+		TSubclassOf<UGameplayAbility> Ability;
 
 public:
-	UBuffSystem* GetBuffSystem();
+	UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 };
