@@ -10,6 +10,7 @@
 
 class UAbilitySystemComponent;
 class UGameplayAbility;
+class UPlayerAttributeSet;
 
 UENUM() 
 enum class AbilityInput : uint8
@@ -48,6 +49,8 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Abilities, meta = (AllowPrivateAccess = "true"))
 		TSubclassOf<UGameplayAbility> Ability;
+
+	UPlayerAttributeSet* PlayerAttributeSet;
 
 public:
 	UAbilitySystemComponent* GetAbilitySystemComponent() const override;

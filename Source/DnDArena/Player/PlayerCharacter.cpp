@@ -2,6 +2,7 @@
 
 #include "PlayerCharacter.h"
 #include "./Buffs/BuffSystem.h"
+#include "./Abilities/PlayerAttributeSet.h"
 #include "AbilitySystemComponent.h"
 
 
@@ -12,6 +13,14 @@ APlayerCharacter::APlayerCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	AbilitySystem = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystem"));
+
+	PlayerAttributeSet = CreateDefaultSubobject<UPlayerAttributeSet>(TEXT("AttributeSet"));
+
+	if (PlayerAttributeSet)
+	{
+		PlayerAttributeSet->SetInitValue(PlayerAttributeSet->MaxHealth, 1000.f);
+		PlayerAttributeSet->SetInitValue(PlayerAttributeSet->Health, 600.f);
+	}
 }
 
 // Called when the game starts or when spawned
@@ -27,7 +36,6 @@ void APlayerCharacter::BeginPlay()
 		}
 		AbilitySystem->InitAbilityActorInfo(this, this);
 	}
-	
 }
 
 // Called every frame
