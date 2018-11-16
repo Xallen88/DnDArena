@@ -21,6 +21,23 @@ public:
 	UPROPERTY(Category = "Attributes", EditAnywhere, BlueprintReadWrite)
 		FGameplayAttributeData MaxHealth;
 
+	UPROPERTY(Category = "Attributes", EditAnywhere, BlueprintReadWrite)
+		FGameplayAttributeData FireResistance;
+
+	UPROPERTY(Category = "Attributes", EditAnywhere, BlueprintReadWrite)
+		FGameplayAttributeData FrostResistance;
+
+	UPROPERTY(Category = "Attributes", EditAnywhere, BlueprintReadWrite)
+		FGameplayAttributeData LightningResistance;
+
+	UPROPERTY(Category = "Attributes", EditAnywhere, BlueprintReadWrite)
+		FGameplayAttributeData PhysicalResistance;
+
+	UPROPERTY(Category = "Attributes", EditAnywhere, BlueprintReadWrite)
+		FGameplayAttributeData PoisonResistance;
+
+	UPROPERTY(Category = "Attributes", EditAnywhere, BlueprintReadWrite)
+		FGameplayAttributeData DarkResistance;
 
 
 public:

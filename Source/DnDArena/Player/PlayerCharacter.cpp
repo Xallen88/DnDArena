@@ -20,6 +20,12 @@ APlayerCharacter::APlayerCharacter()
 	{
 		PlayerAttributeSet->SetInitValue(PlayerAttributeSet->MaxHealth, 1000.f);
 		PlayerAttributeSet->SetInitValue(PlayerAttributeSet->Health, 600.f);
+		PlayerAttributeSet->SetInitValue(PlayerAttributeSet->FireResistance, 10.f);
+		PlayerAttributeSet->SetInitValue(PlayerAttributeSet->FrostResistance, 10.f);
+		PlayerAttributeSet->SetInitValue(PlayerAttributeSet->LightningResistance, 10.f);
+		PlayerAttributeSet->SetInitValue(PlayerAttributeSet->PhysicalResistance, 10.f);
+		PlayerAttributeSet->SetInitValue(PlayerAttributeSet->PoisonResistance, 10.f);
+		PlayerAttributeSet->SetInitValue(PlayerAttributeSet->DarkResistance, 10.f);
 	}
 }
 
