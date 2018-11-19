@@ -38,7 +38,7 @@ void APlayerCharacter::BeginPlay()
 	{	
 		if (HasAuthority() && Ability)
 		{
-			AbilitySystem->GiveAbility(FGameplayAbilitySpec(Ability.GetDefaultObject(), 1, 0));
+			AbilitySystem->GiveAbility(FGameplayAbilitySpec(Ability.GetDefaultObject(), 1, static_cast<int>(AbilityInput::WeaponAttack2)));
 		}
 		AbilitySystem->InitAbilityActorInfo(this, this);
 	}
