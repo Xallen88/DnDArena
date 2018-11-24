@@ -27,9 +27,6 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = Ability)
 		void ExecutionLogic();
 
-	UFUNCTION(Server, Reliable, WithValidation, Category = Ability)
-		void SpawnProjectile();
-
 	UFUNCTION()
 		FVector GetAbilityActorSpawnLocation();
 

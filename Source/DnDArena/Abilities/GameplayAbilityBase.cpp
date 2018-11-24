@@ -6,23 +6,18 @@
 void UGameplayAbilityBase::ExecutionLogic()
 {		
 	if (DoesAbilityTagsContain(FGameplayTag::RequestGameplayTag(FName("Ability.Projectile"))))
-	{
-		UE_LOG(LogTemp, Warning, TEXT("%s"), *GetAbilityActorSpawnLocation().ToString());
-		SpawnProjectile();
+	{ 
+		const FGameplayAbilityActivationInfo* ActivationInfo = &CurrentActivationInfo;
+		if (HasAuthority(ActivationInfo))
+		{
+			UClass* ClassName = AbilityActor->GeneratedClass;
+			FActorSpawnParameters SpawnParams;
+			SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+			SpawnParams.Instigator = Cast<APawn>(GetAvatarActorFromActorInfo());
+			GetWorld()->SpawnActor<AAbilityActorBase>(ClassName, GetAbilityActorSpawnLocation(), GetAbilityActorSpawnRotation(), SpawnParams);
+			//UE_LOG(LogTemp, Warning, TEXT("%s"), *GetAbilityActorSpawnLocation().ToString());
+		}		
 	}
-}
-
-void UGameplayAbilityBase::SpawnProjectile_Implementation()
-{
-	UClass* ClassName = AbilityActor->GeneratedClass;
-	FActorSpawnParameters SpawnParams;
-	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	GetWorld()->SpawnActor<AAbilityActorBase>(ClassName, GetAbilityActorSpawnLocation(), GetAbilityActorSpawnRotation(), SpawnParams);
-}
-
-bool UGameplayAbilityBase::SpawnProjectile_Validate()
-{
-	return true;
 }
 
 FVector UGameplayAbilityBase::GetAbilityActorSpawnLocation()
