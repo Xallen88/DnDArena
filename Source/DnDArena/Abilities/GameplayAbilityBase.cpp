@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "AbilityActorBase.h"
 #include "GameplayAbilityBase.h"
+#include "AbilityActorBase.h"
 
 void UGameplayAbilityBase::ExecutionLogic()
 {		
