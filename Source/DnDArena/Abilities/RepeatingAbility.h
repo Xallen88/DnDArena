@@ -15,16 +15,20 @@ class DNDARENA_API URepeatingAbility : public UGameplayAbilityBase
 	GENERATED_BODY()
 
 private:
-	bool bRepeat = false;
+	bool bRepeat = true;
 
 	UFUNCTION()
 	void CancelRepeat();
-
-	UFUNCTION()
-	void SetRepeat();
 	
 protected:
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
 	
 	virtual void EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled) override;
+
+	virtual void ActivationLoop();
+
+	virtual void AbilityComplete();
+
+	UPROPERTY()
+	class UAbilityTask_PlayMontageAndWait* MontageReference;
 };

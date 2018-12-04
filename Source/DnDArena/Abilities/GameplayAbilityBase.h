@@ -17,13 +17,14 @@ class DNDARENA_API UGameplayAbilityBase : public UGameplayAbility
 	GENERATED_BODY()
 
 private:
+
+protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animation, meta = (AllowPrivateAccess = "true"))
 		UAnimMontage* AbilityAnimation;
-
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Execution, meta = (AllowPrivateAccess = "true"))
 		UBlueprint* AbilityActor;
 
-protected:
 	UFUNCTION(BlueprintCallable, Category = Ability)
 		void ExecutionLogic();
 
