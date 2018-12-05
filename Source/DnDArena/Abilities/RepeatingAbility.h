@@ -18,7 +18,7 @@ private:
 	bool bRepeat = true;
 
 	UFUNCTION()
-	void CancelRepeat();
+		void CancelRepeat();
 	
 protected:
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
@@ -27,8 +27,12 @@ protected:
 
 	virtual void ActivationLoop();
 
-	virtual void AbilityComplete();
+	UFUNCTION()
+		virtual void AbilityComplete();
+
+	UFUNCTION()
+		virtual void RepeatExecution();
 
 	UPROPERTY()
-	class UAbilityTask_PlayMontageAndWait* MontageReference;
+		class UAbilityTask_PlayMontageAndWait* MontageTask;
 };

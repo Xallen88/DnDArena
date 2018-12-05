@@ -23,10 +23,16 @@ protected:
 		UAnimMontage* AbilityAnimation;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Execution, meta = (AllowPrivateAccess = "true"))
-		UBlueprint* AbilityActor;
+		TSubclassOf<AAbilityActorBase> AbilityActor;
 
 	UFUNCTION(BlueprintCallable, Category = Ability)
-		void ExecutionLogic();
+		virtual void ExecutionLogic();
+
+	UFUNCTION()
+		virtual void ProjectileExecution();
+
+	UFUNCTION()
+		virtual void AbilityActorSetup(AActor* ActorToSetup);
 
 	UFUNCTION()
 		FVector GetAbilityActorSpawnLocation();

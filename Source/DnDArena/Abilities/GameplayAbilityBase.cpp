@@ -2,22 +2,54 @@
 
 #include "GameplayAbilityBase.h"
 #include "AbilityActorBase.h"
+#include "AbilityTask_SpawnActor.h"
 
 void UGameplayAbilityBase::ExecutionLogic()
 {		
 	if (DoesAbilityTagsContain(FGameplayTag::RequestGameplayTag(FName("Ability.Projectile"))))
-	{ 
-		const FGameplayAbilityActivationInfo* ActivationInfo = &CurrentActivationInfo;
-		if (HasAuthority(ActivationInfo))
-		{
-			UClass* ClassName = AbilityActor->GeneratedClass;
-			FActorSpawnParameters SpawnParams;
-			SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-			SpawnParams.Instigator = Cast<APawn>(GetAvatarActorFromActorInfo());
-			GetWorld()->SpawnActor<AAbilityActorBase>(ClassName, GetAbilityActorSpawnLocation(), GetAbilityActorSpawnRotation(), SpawnParams);
-			//UE_LOG(LogTemp, Warning, TEXT("%s"), *GetAbilityActorSpawnLocation().ToString());
-		}		
+	{ 		
+		ProjectileExecution();
 	}
+}
+
+void UGameplayAbilityBase::ProjectileExecution()
+{
+	FGameplayAbilityTargetData_LocationInfo SpawnActorTargetData;
+	FGameplayAbilityTargetingLocationInfo SpawnActorLocation;
+	SpawnActorLocation.LiteralTransform = GetAvatarActorFromActorInfo()->GetActorTransform();
+	SpawnActorTargetData.TargetLocation = SpawnActorLocation;
+	FGameplayAbilityTargetDataHandle SpawnActorTargetDataHandle = FGameplayAbilityTargetDataHandle(&SpawnActorTargetData);
+
+	UAbilityTask_SpawnActor* SpawnActorTask = UAbilityTask_SpawnActor::SpawnActor(this, SpawnActorTargetDataHandle, AbilityActor);
+
+	TScriptDelegate<FWeakObjectPtr> SpawnActorScriptDelegate;
+	//SpawnActorScriptDelegate.BindUFunction(this, FName("AbilityActorSetup"));
+	FSpawnActorDelegate SpawnActorDelegate;
+	SpawnActorDelegate.Add(SpawnActorScriptDelegate);
+	SpawnActorTask->Success = SpawnActorDelegate;
+
+	AActor* SpawnedActor;
+	SpawnActorTask->BeginSpawningActor(this, SpawnActorTargetDataHandle, AbilityActor, SpawnedActor);
+	UE_LOG(LogTemp, Warning, TEXT("BEGIN SPAWN"));
+	SpawnActorTask->FinishSpawningActor(this, SpawnActorTargetDataHandle, SpawnedActor);
+	UE_LOG(LogTemp, Warning, TEXT("FINISH SPAWN"));
+	
+	
+	/*const FGameplayAbilityActivationInfo* ActivationInfo = &CurrentActivationInfo;
+	if (HasAuthority(ActivationInfo))
+	{
+		UClass* ClassName = AbilityActor->GeneratedClass;
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		SpawnParams.Instigator = Cast<APawn>(GetAvatarActorFromActorInfo());
+		GetWorld()->SpawnActor<AAbilityActorBase>(ClassName, GetAbilityActorSpawnLocation(), GetAbilityActorSpawnRotation(), SpawnParams);
+	}*/
+}
+
+void UGameplayAbilityBase::AbilityActorSetup(AActor * ActorToSetup)
+{
+	ActorToSetup->SetActorLocation(GetAbilityActorSpawnLocation());
+	ActorToSetup->SetActorRotation(GetAbilityActorSpawnRotation());
 }
 
 FVector UGameplayAbilityBase::GetAbilityActorSpawnLocation()
