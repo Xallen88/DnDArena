@@ -28,7 +28,7 @@ void URepeatingAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 	InputRelease->Activate();
 
 	// Gameplay event tasks - Waiting for specific tags from animation notify (Execute & Repeat)
-	UAbilityTask_WaitGameplayEvent* ExecutionEvent = UAbilityTask_WaitGameplayEvent::WaitGameplayEvent(this, FGameplayTag::RequestGameplayTag(FName("Ability.Event.Execute")));
+	ExecutionEvent = UAbilityTask_WaitGameplayEvent::WaitGameplayEvent(this, FGameplayTag::RequestGameplayTag(FName("Ability.Event.Execute")));
 
 	TScriptDelegate<FWeakObjectPtr> ExecutionScriptDelegate;
 	ExecutionScriptDelegate.BindUFunction(this, FName("ExecutionLogic"));
@@ -54,6 +54,7 @@ void URepeatingAbility::EndAbility(const FGameplayAbilitySpecHandle Handle, cons
 {
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 	
+	ExecutionEvent->EndTask();
 	UE_LOG(LogTemp, Warning, TEXT("ENDED"));
 }
 

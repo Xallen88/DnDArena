@@ -35,4 +35,7 @@ protected:
 
 	UPROPERTY()
 		class UAbilityTask_PlayMontageAndWait* MontageTask;
+
+	UPROPERTY()
+		class UAbilityTask_WaitGameplayEvent* ExecutionEvent;
 };

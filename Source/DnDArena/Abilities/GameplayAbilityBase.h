@@ -23,7 +23,7 @@ protected:
 		UAnimMontage* AbilityAnimation;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Execution, meta = (AllowPrivateAccess = "true"))
-		TSubclassOf<AAbilityActorBase> AbilityActor;
+		UBlueprint* AbilityActor;
 
 	UFUNCTION(BlueprintCallable, Category = Ability)
 		virtual void ExecutionLogic();

@@ -14,25 +14,33 @@ void UGameplayAbilityBase::ExecutionLogic()
 
 void UGameplayAbilityBase::ProjectileExecution()
 {
-	FGameplayAbilityTargetData_LocationInfo SpawnActorTargetData;
+	/*FGameplayAbilityTargetData_LocationInfo SpawnActorTargetData;
 	FGameplayAbilityTargetingLocationInfo SpawnActorLocation;
 	SpawnActorLocation.LiteralTransform = GetAvatarActorFromActorInfo()->GetActorTransform();
 	SpawnActorTargetData.TargetLocation = SpawnActorLocation;
-	FGameplayAbilityTargetDataHandle SpawnActorTargetDataHandle = FGameplayAbilityTargetDataHandle(&SpawnActorTargetData);
+	FGameplayAbilityTargetDataHandle SpawnActorTargetDataHandle = FGameplayAbilityTargetDataHandle(&SpawnActorTargetData);*/
 
-	UAbilityTask_SpawnActor* SpawnActorTask = UAbilityTask_SpawnActor::SpawnActor(this, SpawnActorTargetDataHandle, AbilityActor);
+	UClass* SpawnClass = AbilityActor->GeneratedClass;
+	//TSubclassOf<AActor> SpawnSubclass = SpawnClass;
 
-	TScriptDelegate<FWeakObjectPtr> SpawnActorScriptDelegate;
+	if (SpawnClass->IsChildOf(AAbilityActorBase::StaticClass()))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("IS CHILD OF"));
+	}
+
+	//UAbilityTask_SpawnActor* SpawnActorTask = UAbilityTask_SpawnActor::SpawnActor(this, SpawnActorTargetDataHandle,SpawnSubclass);
+
+	//TScriptDelegate<FWeakObjectPtr> SpawnActorScriptDelegate;
 	//SpawnActorScriptDelegate.BindUFunction(this, FName("AbilityActorSetup"));
-	FSpawnActorDelegate SpawnActorDelegate;
-	SpawnActorDelegate.Add(SpawnActorScriptDelegate);
-	SpawnActorTask->Success = SpawnActorDelegate;
+	//FSpawnActorDelegate SpawnActorDelegate;
+	//SpawnActorDelegate.Add(SpawnActorScriptDelegate);
+	//SpawnActorTask->Success = SpawnActorDelegate;
 
-	AActor* SpawnedActor;
-	SpawnActorTask->BeginSpawningActor(this, SpawnActorTargetDataHandle, AbilityActor, SpawnedActor);
+	/*AActor* SpawnedActor;
+	SpawnActorTask->BeginSpawningActor(this, SpawnActorTargetDataHandle,SpawnSubclass, SpawnedActor);
 	UE_LOG(LogTemp, Warning, TEXT("BEGIN SPAWN"));
 	SpawnActorTask->FinishSpawningActor(this, SpawnActorTargetDataHandle, SpawnedActor);
-	UE_LOG(LogTemp, Warning, TEXT("FINISH SPAWN"));
+	UE_LOG(LogTemp, Warning, TEXT("FINISH SPAWN"));*/
 	
 	
 	/*const FGameplayAbilityActivationInfo* ActivationInfo = &CurrentActivationInfo;
