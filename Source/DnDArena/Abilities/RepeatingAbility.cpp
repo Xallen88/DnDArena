@@ -18,14 +18,14 @@ void URepeatingAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 	bRepeat = true;
 
 	// Input release task - Test for release of skill button during animation
-	UAbilityTask_WaitInputRelease* InputRelease = UAbilityTask_WaitInputRelease::WaitInputRelease(this, true);
+	InputReleaseTask = UAbilityTask_WaitInputRelease::WaitInputRelease(this, true);
 	
 	TScriptDelegate<FWeakObjectPtr> InputReleaseScriptDelegate;
 	InputReleaseScriptDelegate.BindUFunction(this, FName("CancelRepeat"));
 	FInputReleaseDelegate InputReleaseDelagate;
 	InputReleaseDelagate.Add(InputReleaseScriptDelegate);
-	InputRelease->OnRelease = InputReleaseDelagate;
-	InputRelease->Activate();
+	InputReleaseTask->OnRelease = InputReleaseDelagate;
+	InputReleaseTask->Activate();
 
 	// Gameplay event tasks - Waiting for specific tags from animation notify (Execute & Repeat)
 	ExecutionEvent = UAbilityTask_WaitGameplayEvent::WaitGameplayEvent(this, FGameplayTag::RequestGameplayTag(FName("Ability.Event.Execute")));
@@ -37,7 +37,7 @@ void URepeatingAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 	ExecutionEvent->EventReceived = ExecutionDelegate;
 	ExecutionEvent->Activate();
 
-	UAbilityTask_WaitGameplayEvent* RepeatEvent = UAbilityTask_WaitGameplayEvent::WaitGameplayEvent(this, FGameplayTag::RequestGameplayTag(FName("Ability.Event.Repeat")));
+	RepeatEvent = UAbilityTask_WaitGameplayEvent::WaitGameplayEvent(this, FGameplayTag::RequestGameplayTag(FName("Ability.Event.Repeat")));
 
 	TScriptDelegate<FWeakObjectPtr> RepeatScriptDelegate;
 	RepeatScriptDelegate.BindUFunction(this, FName("RepeatExecution"));
@@ -55,6 +55,17 @@ void URepeatingAbility::EndAbility(const FGameplayAbilitySpecHandle Handle, cons
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 	
 	ExecutionEvent->EndTask();
+	RepeatEvent->EndTask();
+	if (InputReleaseTask)
+	{
+		InputReleaseTask->EndTask();
+	}
+
+	if (bWasCancelled)
+	{
+		
+	}
+
 	UE_LOG(LogTemp, Warning, TEXT("ENDED"));
 }
 

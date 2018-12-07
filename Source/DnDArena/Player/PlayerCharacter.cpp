@@ -4,6 +4,7 @@
 #include "./Buffs/BuffSystem.h"
 #include "./Abilities/PlayerAttributeSet.h"
 #include "AbilitySystemComponent.h"
+#include "UnrealNetwork.h"
 
 
 // Sets default values
@@ -26,6 +27,11 @@ APlayerCharacter::APlayerCharacter()
 		PlayerAttributeSet->SetInitValue(PlayerAttributeSet->PhysicalResistance, 10.f);
 		PlayerAttributeSet->SetInitValue(PlayerAttributeSet->PoisonResistance, 10.f);
 		PlayerAttributeSet->SetInitValue(PlayerAttributeSet->DarkResistance, 10.f);
+
+		PlayerAttributeSet->SetInitValue(PlayerAttributeSet->MaxResource, 1000.f);
+		PlayerAttributeSet->SetInitValue(PlayerAttributeSet->Resource, 800.f);
+		PlayerAttributeSet->SetInitValue(PlayerAttributeSet->AttackSpeed, 1.f);
+		PlayerAttributeSet->SetInitValue(PlayerAttributeSet->CastSpeed, 1.f);
 	}
 }
 

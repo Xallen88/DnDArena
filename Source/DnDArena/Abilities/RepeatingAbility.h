@@ -38,4 +38,10 @@ protected:
 
 	UPROPERTY()
 		class UAbilityTask_WaitGameplayEvent* ExecutionEvent;
+
+	UPROPERTY()
+		class UAbilityTask_WaitGameplayEvent* RepeatEvent;
+
+	UPROPERTY()
+		class UAbilityTask_WaitInputRelease* InputReleaseTask;
 };

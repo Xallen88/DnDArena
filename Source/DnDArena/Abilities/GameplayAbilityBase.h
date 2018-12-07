@@ -17,23 +17,24 @@ class DNDARENA_API UGameplayAbilityBase : public UGameplayAbility
 	GENERATED_BODY()
 
 private:
+	bool SpawnAbilityActor();
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animation, meta = (AllowPrivateAccess = "true"))
 		UAnimMontage* AbilityAnimation;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Execution, meta = (AllowPrivateAccess = "true"))
-		UBlueprint* AbilityActor;
+		TSubclassOf<AAbilityActorBase> AbilityActorClass;
+
+	UPROPERTY()
+		AAbilityActorBase* AbilityActor;
 
 	UFUNCTION(BlueprintCallable, Category = Ability)
 		virtual void ExecutionLogic();
 
 	UFUNCTION()
 		virtual void ProjectileExecution();
-
-	UFUNCTION()
-		virtual void AbilityActorSetup(AActor* ActorToSetup);
-
+	
 	UFUNCTION()
 		FVector GetAbilityActorSpawnLocation();
 
