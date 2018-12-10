@@ -4,13 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "./Buffs/BuffSystem.h"
 #include "AbilitySystemInterface.h"
 #include "PlayerCharacter.generated.h"
 
 class UAbilitySystemComponent;
 class UGameplayAbility;
 class UPlayerAttributeSet;
+class USpringArmComponent;
+class UCameraComponent;
 
 UENUM() 
 enum class AbilityInput : uint8
@@ -39,11 +40,17 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	// Extended of PossessedBy to include GameplayAbility setttings
+	// Extended PossessedBy to include GameplayAbility setttings
 	void PossessedBy(AController* NewController) override;
 
 	
 private:
+	/*UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		USpringArmComponent* CameraArm;
+
+	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		UCameraComponent* PlayerCamera;*/
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Abilities, meta = (AllowPrivateAccess = "true"))
 		UAbilitySystemComponent* AbilitySystem;
 
@@ -54,4 +61,6 @@ private:
 
 public:
 	UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 };

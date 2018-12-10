@@ -5,6 +5,10 @@
 #include "./Abilities/PlayerAttributeSet.h"
 #include "AbilitySystemComponent.h"
 #include "UnrealNetwork.h"
+#include "Abilities/AbilityActorBase.h"
+#include "GameplayEffect.h"
+//#include "GameFramework/SpringArmComponent.h"
+//#include "Camera/CameraComponent.h"
 
 
 // Sets default values
@@ -12,6 +16,18 @@ APlayerCharacter::APlayerCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	/*CameraArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraArm"));
+	CameraArm->SetupAttachment(RootComponent);
+	CameraArm->RelativeRotation = FRotator(0.f, 0.f, 0.f);	
+	CameraArm->TargetArmLength = 300.f;
+	CameraArm->bEnableCameraLag = true;
+	CameraArm->CameraLagSpeed = 2.0f;
+	CameraArm->bUsePawnControlRotation = true;
+
+	PlayerCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("Player Camera"));
+	PlayerCamera->SetupAttachment(CameraArm, USpringArmComponent::SocketName);
+	PlayerCamera->RelativeLocation = FVector(-200.f, 0.f, 100.f);*/
 
 	AbilitySystem = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystem"));
 
@@ -76,5 +92,24 @@ void APlayerCharacter::PossessedBy(AController * NewController)
 UAbilitySystemComponent * APlayerCharacter::GetAbilitySystemComponent() const
 {
 	return AbilitySystem;
+}
+
+float APlayerCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
+{
+	if (!DamageCauser->IsA<AAbilityActorBase>())
+	{
+		return 0.f;
+	}
+
+	AAbilityActorBase* DamagingAbilityActor = Cast<AAbilityActorBase>(DamageCauser);
+	TArray<TSubclassOf<UGameplayEffect>> EffectArray = DamagingAbilityActor->GetEffects();	
+
+	for (int32 i = 0; i < EffectArray.Num(); ++i)
+	{
+		UGameplayEffect* GameplayEffect = EffectArray[i].GetDefaultObject();
+		AbilitySystem->ApplyGameplayEffectToSelf(GameplayEffect, 1, DamagingAbilityActor->GetDamageContextHandle());
+	}
+
+	return 0.f;
 }
 

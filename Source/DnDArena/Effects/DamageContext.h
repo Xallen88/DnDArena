@@ -6,18 +6,6 @@
 #include "GameplayEffectTypes.h"
 #include "DamageContext.generated.h"
 
-UENUM()
-enum class EDamageType : uint8
-{
-	Fire,
-	Frost,
-	Lightning,
-	Physical,
-	Poison,
-	Dark
-};
-
-
 USTRUCT()
 struct DNDARENA_API FDamageContext : public FGameplayEffectContext
 {

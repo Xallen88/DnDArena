@@ -3,7 +3,6 @@
 #include "AbilityActorBase.h"
 #include "Effects/DamageContext.h"
 
-
 // Sets default values
 AAbilityActorBase::AAbilityActorBase()
 {
@@ -34,5 +33,10 @@ void AAbilityActorBase::AddDamageContext(AActor * Instigator, AActor * DamageCau
 FGameplayEffectContextHandle AAbilityActorBase::GetDamageContextHandle()
 {
 	return DamageContextHandle;
+}
+
+TArray<TSubclassOf<UGameplayEffect>> AAbilityActorBase::GetEffects()
+{
+	return Effects;
 }
 

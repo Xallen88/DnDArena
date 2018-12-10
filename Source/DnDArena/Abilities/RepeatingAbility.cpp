@@ -14,7 +14,6 @@ void URepeatingAbility::CancelRepeat()
 
 void URepeatingAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
 {
-	UE_LOG(LogTemp, Warning, TEXT("BEGIN"));
 	bRepeat = true;
 
 	// Input release task - Test for release of skill button during animation
@@ -65,8 +64,6 @@ void URepeatingAbility::EndAbility(const FGameplayAbilitySpecHandle Handle, cons
 	{
 		
 	}
-
-	UE_LOG(LogTemp, Warning, TEXT("ENDED"));
 }
 
 void URepeatingAbility::ActivationLoop()

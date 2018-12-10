@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Effects/DamageContext.h"
+#include "GameplayEffect.h"
 #include "AbilityActorBase.generated.h"
 
 UCLASS()
@@ -24,13 +25,17 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+
 public:
 	virtual void AddDamageContext(AActor* Instigator, AActor* DamageCauser, float FireDamage, float FrostDamage, float LightningDamage, float PhysicalDamage, float PoisonDamage, float DarkDamage);
 
 	FGameplayEffectContextHandle GetDamageContextHandle();
 
-private:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Damage, meta = (AllowPrivateAccess = "true"))
+	TArray<TSubclassOf<UGameplayEffect>> GetEffects();
+
+protected:
 	FGameplayEffectContextHandle DamageContextHandle;
-	
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Effects, meta = (AllowPrivateAccess = "true"))
+		TArray<TSubclassOf<UGameplayEffect>> Effects;
 };

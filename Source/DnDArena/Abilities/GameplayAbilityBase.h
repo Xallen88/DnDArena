@@ -21,7 +21,7 @@ private:
 	bool SpawnAbilityActor();
 
 protected:
-	// Blueprint variables
+	// Blueprint variables - These variables require a default value
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animation, meta = (AllowPrivateAccess = "true"))
 		UAnimMontage* AbilityAnimation;
 	

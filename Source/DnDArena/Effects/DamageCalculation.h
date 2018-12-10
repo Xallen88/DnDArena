@@ -12,8 +12,8 @@
 UCLASS()
 class DNDARENA_API UDamageCalculation : public UGameplayEffectExecutionCalculation
 {
-	GENERATED_BODY()
-
+	GENERATED_UCLASS_BODY()
+		
 public:
 	virtual void Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecutionParams, OUT FGameplayEffectCustomExecutionOutput& OutExecutionOutput) const override;
 	
