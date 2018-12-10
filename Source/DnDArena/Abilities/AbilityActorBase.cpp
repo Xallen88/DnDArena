@@ -1,6 +1,7 @@
 // Copyright 2018-2019 Xallenia Studios. All Rights Reserved.
 
 #include "AbilityActorBase.h"
+#include "Effects/DamageContext.h"
 
 
 // Sets default values
@@ -23,5 +24,15 @@ void AAbilityActorBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AAbilityActorBase::AddDamageContext(AActor * Instigator, AActor * DamageCauser, float FireDamage, float FrostDamage, float LightningDamage, float PhysicalDamage, float PoisonDamage, float DarkDamage)
+{
+	DamageContextHandle = FGameplayEffectContextHandle(new FDamageContext(Instigator, DamageCauser, FireDamage, FrostDamage, LightningDamage, PhysicalDamage, PoisonDamage, DarkDamage));
+}
+
+FGameplayEffectContextHandle AAbilityActorBase::GetDamageContextHandle()
+{
+	return DamageContextHandle;
 }
 

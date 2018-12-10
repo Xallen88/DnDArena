@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility.h"
+#include "Effects/DamageContext.h"
 #include "GameplayAbilityBase.generated.h"
 
 class AAbilityActorBase;
@@ -20,15 +21,31 @@ private:
 	bool SpawnAbilityActor();
 
 protected:
+	// Blueprint variables
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animation, meta = (AllowPrivateAccess = "true"))
 		UAnimMontage* AbilityAnimation;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Execution, meta = (AllowPrivateAccess = "true"))
 		TSubclassOf<AAbilityActorBase> AbilityActorClass;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Damage, meta = (AllowPrivateAccess = "true"))
+		float FireDamage;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Damage, meta = (AllowPrivateAccess = "true"))
+		float FrostDamage;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Damage, meta = (AllowPrivateAccess = "true"))
+		float LightningDamage;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Damage, meta = (AllowPrivateAccess = "true"))
+		float PhysicalDamage;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Damage, meta = (AllowPrivateAccess = "true"))
+		float PoisonDamage;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Damage, meta = (AllowPrivateAccess = "true"))
+		float DarkDamage;
+
+	// Variables
 	UPROPERTY()
 		AAbilityActorBase* AbilityActor;
 
+	// Functions
 	UFUNCTION(BlueprintCallable, Category = Ability)
 		virtual void ExecutionLogic();
 
@@ -42,7 +59,7 @@ protected:
 		FRotator GetAbilityActorSpawnRotation();
 	
 public:
-	virtual uint8 GetGameplayTaskDefaultPriority() const override { return FGameplayTasks::DefaultPriority; }
+	virtual uint8 GetGameplayTaskDefaultPriority() const override { return FGameplayTasks::DefaultPriority; } // Couldn't compile without this
 	
 	UFUNCTION(BlueprintCallable, Category = Ability)
 		bool DoesAbilityTagsContain(FGameplayTag Tag) const;

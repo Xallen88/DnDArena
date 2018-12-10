@@ -3,7 +3,6 @@
 #include "GameplayAbilityBase.h"
 #include "AbilityActorBase.h"
 #include "AbilityTask_SpawnActor.h"
-#include "GameplayAbilityTargetTypes.h"
 
 void UGameplayAbilityBase::ExecutionLogic()
 {		
@@ -28,6 +27,7 @@ bool UGameplayAbilityBase::SpawnAbilityActor()
 		AbilityActor = GetWorld()->SpawnActor<AAbilityActorBase>(AbilityActorClass, GetAbilityActorSpawnLocation(), GetAbilityActorSpawnRotation(), SpawnParams);
 		if (AbilityActor)
 		{
+			AbilityActor->AddDamageContext(SpawnParams.Instigator, AbilityActor, FireDamage, FrostDamage, LightningDamage, PhysicalDamage, PoisonDamage, DarkDamage);
 			return true;
 		}
 	}
