@@ -16,7 +16,14 @@ class UCameraComponent;
 UENUM() 
 enum class AbilityInput : uint8
 {
-	WeaponAttack2 UMETA(DisplayName = "TestSpell")
+	WeaponAbility,
+	WeaponAbility2,
+	AreaAbility,
+	AreaAbility2,
+	SpecialAbility,
+	SpecialAbility2,
+	MeleeAbility,
+	MeleeAbility2
 };
 
 
@@ -45,22 +52,40 @@ public:
 
 	
 private:
-	/*UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	// Components
+	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 		USpringArmComponent* CameraArm;
 
 	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-		UCameraComponent* PlayerCamera;*/
+		UCameraComponent* PlayerCamera;
 
+	// Ability system
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Abilities, meta = (AllowPrivateAccess = "true"))
 		UAbilitySystemComponent* AbilitySystem;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Abilities, meta = (AllowPrivateAccess = "true"))
-		TSubclassOf<UGameplayAbility> Ability;
+		TSubclassOf<UGameplayAbility> WeaponAbility;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Abilities, meta = (AllowPrivateAccess = "true"))
+		TSubclassOf<UGameplayAbility> WeaponAbility2;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Abilities, meta = (AllowPrivateAccess = "true"))
+		TSubclassOf<UGameplayAbility> AreaAbility;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Abilities, meta = (AllowPrivateAccess = "true"))
+		TSubclassOf<UGameplayAbility> AreaAbility2;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Abilities, meta = (AllowPrivateAccess = "true"))
+		TSubclassOf<UGameplayAbility> SpecialAbility;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Abilities, meta = (AllowPrivateAccess = "true"))
+		TSubclassOf<UGameplayAbility> SpecialAbility2;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Abilities, meta = (AllowPrivateAccess = "true"))
+		TSubclassOf<UGameplayAbility> MeleeAbility;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Abilities, meta = (AllowPrivateAccess = "true"))
+		TSubclassOf<UGameplayAbility> MeleeAbility2;
 
 	UPlayerAttributeSet* PlayerAttributeSet;
 
 public:
 	UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+
+	UCameraComponent* GetCameraComponent() const;
 
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 };

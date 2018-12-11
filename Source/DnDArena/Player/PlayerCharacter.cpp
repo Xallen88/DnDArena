@@ -7,8 +7,8 @@
 #include "UnrealNetwork.h"
 #include "Abilities/AbilityActorBase.h"
 #include "GameplayEffect.h"
-//#include "GameFramework/SpringArmComponent.h"
-//#include "Camera/CameraComponent.h"
+#include "GameFramework/SpringArmComponent.h"
+#include "Camera/CameraComponent.h"
 
 
 // Sets default values
@@ -17,17 +17,17 @@ APlayerCharacter::APlayerCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	/*CameraArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraArm"));
+	CameraArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraArm"));
 	CameraArm->SetupAttachment(RootComponent);
 	CameraArm->RelativeRotation = FRotator(0.f, 0.f, 0.f);	
 	CameraArm->TargetArmLength = 300.f;
 	CameraArm->bEnableCameraLag = true;
-	CameraArm->CameraLagSpeed = 2.0f;
+	CameraArm->CameraLagSpeed = 12.0f;
 	CameraArm->bUsePawnControlRotation = true;
 
 	PlayerCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("Player Camera"));
 	PlayerCamera->SetupAttachment(CameraArm, USpringArmComponent::SocketName);
-	PlayerCamera->RelativeLocation = FVector(-200.f, 0.f, 100.f);*/
+	PlayerCamera->RelativeLocation = FVector(-200.f, 0.f, 100.f);
 
 	AbilitySystem = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystem"));
 
@@ -56,12 +56,45 @@ void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	// Setup AbilitySystemComponent and ability inputs
 	if (AbilitySystem)
 	{	
-		if (HasAuthority() && Ability)
+		if (HasAuthority())
 		{
-			AbilitySystem->GiveAbility(FGameplayAbilitySpec(Ability.GetDefaultObject(), 1, static_cast<int>(AbilityInput::WeaponAttack2)));
+			if(WeaponAbility)			
+			{
+				AbilitySystem->GiveAbility(FGameplayAbilitySpec(WeaponAbility.GetDefaultObject(), 1, static_cast<int>(AbilityInput::WeaponAbility)));
+			}
+			if (WeaponAbility2)
+			{
+				AbilitySystem->GiveAbility(FGameplayAbilitySpec(WeaponAbility2.GetDefaultObject(), 1, static_cast<int>(AbilityInput::WeaponAbility2)));
+			}
+			if (AreaAbility)
+			{
+				AbilitySystem->GiveAbility(FGameplayAbilitySpec(AreaAbility.GetDefaultObject(), 1, static_cast<int>(AbilityInput::AreaAbility)));
+			}
+			if (AreaAbility2)
+			{
+				AbilitySystem->GiveAbility(FGameplayAbilitySpec(AreaAbility2.GetDefaultObject(), 1, static_cast<int>(AbilityInput::AreaAbility2)));
+			}
+			if (SpecialAbility)
+			{
+				AbilitySystem->GiveAbility(FGameplayAbilitySpec(SpecialAbility.GetDefaultObject(), 1, static_cast<int>(AbilityInput::SpecialAbility)));
+			}
+			if (SpecialAbility2)
+			{
+				AbilitySystem->GiveAbility(FGameplayAbilitySpec(SpecialAbility2.GetDefaultObject(), 1, static_cast<int>(AbilityInput::SpecialAbility2)));
+			}
+			if (MeleeAbility)
+			{
+				AbilitySystem->GiveAbility(FGameplayAbilitySpec(MeleeAbility.GetDefaultObject(), 1, static_cast<int>(AbilityInput::MeleeAbility)));
+			}
+			if (MeleeAbility2)
+			{
+				AbilitySystem->GiveAbility(FGameplayAbilitySpec(MeleeAbility2.GetDefaultObject(), 1, static_cast<int>(AbilityInput::MeleeAbility2)));
+			}
 		}
+
 		AbilitySystem->InitAbilityActorInfo(this, this);
 	}
 }
@@ -92,6 +125,11 @@ void APlayerCharacter::PossessedBy(AController * NewController)
 UAbilitySystemComponent * APlayerCharacter::GetAbilitySystemComponent() const
 {
 	return AbilitySystem;
+}
+
+UCameraComponent * APlayerCharacter::GetCameraComponent() const
+{
+	return PlayerCamera;
 }
 
 float APlayerCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)

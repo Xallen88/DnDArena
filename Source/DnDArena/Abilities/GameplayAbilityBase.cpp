@@ -3,6 +3,8 @@
 #include "GameplayAbilityBase.h"
 #include "AbilityActorBase.h"
 #include "AbilityTask_SpawnActor.h"
+#include "Player/PlayerCharacter.h"
+#include "Camera/CameraComponent.h"
 
 void UGameplayAbilityBase::ExecutionLogic()
 {		
@@ -40,8 +42,16 @@ FVector UGameplayAbilityBase::GetAbilityActorSpawnLocation()
 }
 
 FRotator UGameplayAbilityBase::GetAbilityActorSpawnRotation()
-{
-	return GetAvatarActorFromActorInfo()->GetActorRotation();
+{	
+	if (DoesAbilityTagsContain(FGameplayTag::RequestGameplayTag(FName("Ability.Rotation.UseCamera"))))
+	{
+		return Cast<APlayerCharacter>(GetAvatarActorFromActorInfo())->GetCameraComponent()->GetComponentRotation();
+	}
+	else
+	{
+		return GetAvatarActorFromActorInfo()->GetActorRotation();
+	}
+	
 }
 
 bool UGameplayAbilityBase::DoesAbilityTagsContain(FGameplayTag Tag) const
