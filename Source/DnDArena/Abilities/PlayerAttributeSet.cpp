@@ -34,6 +34,11 @@ void UPlayerAttributeSet::OnRep_CastSpeed()
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UPlayerAttributeSet, CastSpeed);
 }
 
+void UPlayerAttributeSet::OnRep_MovementSpeed()
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPlayerAttributeSet, MovementSpeed);
+}
+
 void UPlayerAttributeSet::SetInitValue(FGameplayAttributeData & AttributeData, float InitValue)
 {
 	AttributeData.SetBaseValue(InitValue);
@@ -52,6 +57,8 @@ void UPlayerAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& 
 
 	DOREPLIFETIME_CONDITION_NOTIFY(UPlayerAttributeSet, AttackSpeed, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UPlayerAttributeSet, CastSpeed, COND_None, REPNOTIFY_Always);
+
+	DOREPLIFETIME_CONDITION_NOTIFY(UPlayerAttributeSet, MovementSpeed, COND_None, REPNOTIFY_Always);
 }
 
 

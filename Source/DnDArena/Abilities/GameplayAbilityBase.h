@@ -20,11 +20,12 @@ class DNDARENA_API UGameplayAbilityBase : public UGameplayAbility
 private:
 	bool SpawnAbilityActor();
 
+	void ApplyMovementEffect();
+
+	void RemoveMovementEffect();
+
 protected:
-	// Blueprint variables - These variables require a default value
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animation, meta = (AllowPrivateAccess = "true"))
-		UAnimMontage* AbilityAnimation;
-	
+	// Blueprint variables - These variables require a default value	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Execution, meta = (AllowPrivateAccess = "true"))
 		TSubclassOf<AAbilityActorBase> AbilityActorClass;
 

@@ -9,6 +9,7 @@
 #include "GameplayEffect.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 
 // Sets default values
@@ -48,6 +49,8 @@ APlayerCharacter::APlayerCharacter()
 		PlayerAttributeSet->SetInitValue(PlayerAttributeSet->Resource, 800.f);
 		PlayerAttributeSet->SetInitValue(PlayerAttributeSet->AttackSpeed, 1.f);
 		PlayerAttributeSet->SetInitValue(PlayerAttributeSet->CastSpeed, 1.f);
+
+		PlayerAttributeSet->SetInitValue(PlayerAttributeSet->MovementSpeed, 600.f);
 	}
 }
 
@@ -149,5 +152,24 @@ float APlayerCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const
 	}
 
 	return 0.f;
+}
+
+void APlayerCharacter::UpdateMovementMulticast_Implementation()
+{
+	UCharacterMovementComponent* CharacterMovement = GetCharacterMovement();
+	if (PlayerAttributeSet->MovementSpeed.GetCurrentValue() == 0)
+	{
+		CharacterMovement->StopMovementImmediately();
+		CharacterMovement->DisableMovement();
+	}
+	else
+	{
+		CharacterMovement->MaxWalkSpeed = PlayerAttributeSet->MovementSpeed.GetCurrentValue();
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *FString::SanitizeFloat(CharacterMovement->MaxWalkSpeed));
+		if (CharacterMovement->MovementMode == EMovementMode::MOVE_None)
+		{
+			CharacterMovement->SetMovementMode(EMovementMode::MOVE_Walking);
+		}
+	}	
 }
 

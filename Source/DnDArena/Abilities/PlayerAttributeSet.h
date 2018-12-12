@@ -65,6 +65,12 @@ public:
 	UFUNCTION()
 		void OnRep_CastSpeed();
 
+	// Movement
+	UPROPERTY(Category = "Attributes", EditAnywhere, BlueprintReadWrite, ReplicatedUsing = OnRep_MovementSpeed)
+		FGameplayAttributeData MovementSpeed;
+	UFUNCTION()
+		void OnRep_MovementSpeed();
+
 public:
 	void SetInitValue(FGameplayAttributeData& AttributeData, float InitValue);
 

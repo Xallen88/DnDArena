@@ -6,6 +6,24 @@
 #include "Player/PlayerCharacter.h"
 #include "Camera/CameraComponent.h"
 
+void UGameplayAbilityBase::ApplyMovementEffect()
+{
+	if (DoesAbilityTagsContain(FGameplayTag::RequestGameplayTag(FName("Ability.Movement.Root"))))
+	{
+		// Apply ability root GameplayEffect
+	}
+	if (DoesAbilityTagsContain(FGameplayTag::RequestGameplayTag(FName("Ability.Movement.Slow"))))
+	{
+		// Apply ability slow GameplayEffect
+	}
+}
+
+void UGameplayAbilityBase::RemoveMovementEffect()
+{
+	// Remove ability root GameplayEffect
+	// Remove ability slow GameplayEffect
+}
+
 void UGameplayAbilityBase::ExecutionLogic()
 {		
 	if (DoesAbilityTagsContain(FGameplayTag::RequestGameplayTag(FName("Ability.Projectile"))))
