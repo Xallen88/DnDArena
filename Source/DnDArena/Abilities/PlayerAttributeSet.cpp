@@ -3,6 +3,7 @@
 #include "PlayerAttributeSet.h"
 #include "AbilitySystemComponent.h"
 #include "UnrealNetwork.h"
+#include "Player/PlayerCharacter.h"
 
 void UPlayerAttributeSet::OnRep_Health()
 {
@@ -37,6 +38,8 @@ void UPlayerAttributeSet::OnRep_CastSpeed()
 void UPlayerAttributeSet::OnRep_MovementSpeed()
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UPlayerAttributeSet, MovementSpeed);
+
+	Cast<APlayerCharacter>(GetOwningAbilitySystemComponent()->GetAvatarActor())->UpdateMovement();
 }
 
 void UPlayerAttributeSet::SetInitValue(FGameplayAttributeData & AttributeData, float InitValue)

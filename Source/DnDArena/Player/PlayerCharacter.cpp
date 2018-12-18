@@ -154,7 +154,7 @@ float APlayerCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const
 	return 0.f;
 }
 
-void APlayerCharacter::UpdateMovementMulticast_Implementation()
+void APlayerCharacter::UpdateMovement()
 {
 	UCharacterMovementComponent* CharacterMovement = GetCharacterMovement();
 	if (PlayerAttributeSet->MovementSpeed.GetCurrentValue() == 0)
@@ -165,7 +165,6 @@ void APlayerCharacter::UpdateMovementMulticast_Implementation()
 	else
 	{
 		CharacterMovement->MaxWalkSpeed = PlayerAttributeSet->MovementSpeed.GetCurrentValue();
-		UE_LOG(LogTemp, Warning, TEXT("%s"), *FString::SanitizeFloat(CharacterMovement->MaxWalkSpeed));
 		if (CharacterMovement->MovementMode == EMovementMode::MOVE_None)
 		{
 			CharacterMovement->SetMovementMode(EMovementMode::MOVE_Walking);

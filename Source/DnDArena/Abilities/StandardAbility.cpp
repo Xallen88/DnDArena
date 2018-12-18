@@ -89,18 +89,25 @@ void UStandardAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle, 
 	}
 
 	// Activate
-	if (CastingMontageTask) 
+	if (CommitAbility(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo())) 
 	{
-		CastingMontageTask->Activate();
-	}
-	else if (ReadyMontageTask)
-	{
-		ReadyMontageTask->Activate();
-		ConfirmInputTask->Activate();
+		if (CastingMontageTask)
+		{
+			CastingMontageTask->Activate();
+		}
+		else if (ReadyMontageTask)
+		{
+			ReadyMontageTask->Activate();
+			ConfirmInputTask->Activate();
+		}
+		else
+		{
+			ExecutionMontageTask->Activate();
+		}
 	}
 	else
 	{
-		ExecutionMontageTask->Activate();
+		CancelAbility(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo(), true);
 	}
 }
 

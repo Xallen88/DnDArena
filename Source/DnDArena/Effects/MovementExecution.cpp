@@ -11,7 +11,7 @@ void UMovementExecution::Execute_Implementation(const FGameplayEffectCustomExecu
 	APlayerCharacter* Player = Cast<APlayerCharacter>(ExecutionParams.GetSourceAbilitySystemComponent()->GetAvatarActor());
 	if (!Player){ return; }
 
-	Player->UpdateMovementMulticast();
+	Player->UpdateMovement();
 }
 
 
