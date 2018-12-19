@@ -65,5 +65,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Ability)
 		bool DoesAbilityTagsContain(FGameplayTag Tag) const;
 
+	virtual bool CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags = nullptr, const FGameplayTagContainer* TargetTags = nullptr, OUT FGameplayTagContainer* OptionalRelevantTags = nullptr) const override;
+
 	
 };

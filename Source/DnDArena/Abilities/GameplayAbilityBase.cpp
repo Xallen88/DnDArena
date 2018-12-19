@@ -5,14 +5,15 @@
 #include "AbilityTask_SpawnActor.h"
 #include "Player/PlayerCharacter.h"
 #include "Camera/CameraComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 void UGameplayAbilityBase::ApplyMovementEffect()
 {
-	if (DoesAbilityTagsContain(FGameplayTag::RequestGameplayTag(FName("Ability.Movement.Root"))))
+	if (DoesAbilityTagsContain(FGameplayTag::RequestGameplayTag(FName("Ability.Root"))))
 	{
 		// Apply ability root GameplayEffect
 	}
-	if (DoesAbilityTagsContain(FGameplayTag::RequestGameplayTag(FName("Ability.Movement.Slow"))))
+	if (DoesAbilityTagsContain(FGameplayTag::RequestGameplayTag(FName("Ability.Slow"))))
 	{
 		// Apply ability slow GameplayEffect
 	}
@@ -75,4 +76,19 @@ FRotator UGameplayAbilityBase::GetAbilityActorSpawnRotation()
 bool UGameplayAbilityBase::DoesAbilityTagsContain(FGameplayTag Tag) const
 {
 	return AbilityTags.HasTag(Tag);
+}
+
+bool UGameplayAbilityBase::CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo * ActorInfo, const FGameplayTagContainer * SourceTags, const FGameplayTagContainer * TargetTags, OUT FGameplayTagContainer * OptionalRelevantTags) const
+{
+	if (!Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags))
+	{
+		return false;
+	}
+
+	if (Cast<APlayerCharacter>(GetOwningActorFromActorInfo())->GetCharacterMovement()->IsFalling())
+	{
+		return false;
+	}
+
+	return true;
 }
