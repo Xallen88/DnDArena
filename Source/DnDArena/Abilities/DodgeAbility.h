@@ -22,6 +22,8 @@ private:
 		void DodgeComplete();
 
 protected:
+	FGameplayTagContainer TagsToBlock;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animation, meta = (AllowPrivateAccess = "true"))
 		UAnimMontage* DodgeAnimation;
 	

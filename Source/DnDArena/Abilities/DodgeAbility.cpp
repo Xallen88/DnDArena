@@ -4,6 +4,10 @@
 #include "AbilityTask_PlayMontageAndWait.h"
 #include "AbilityTask_WaitInputPress.h"
 #include "AbilityTask_WaitDelay.h"
+#include "AbilitySystemComponent.h"
+#include "Player/PlayerCharacter.h"
+#include "Gameframework/CharacterMovementComponent.h"
+#include "AbilityTask_ApplyRootMotionConstantForce.h"
 
 void UDodgeAbility::WaitTimeout()
 {
@@ -23,6 +27,12 @@ void UDodgeAbility::ExecutionLogic()
 	{
 		TimeoutTask->EndTask();
 
+		// After successful activation, should apply special cancel and blocks (block all abilities & cancel current ones)
+		FGameplayTagContainer TagsToCancel;
+		TagsToCancel.AddTag(FGameplayTag::RequestGameplayTag(FName("Ability.Skill")));		
+		TagsToBlock.AddTag(FGameplayTag::RequestGameplayTag(FName("Ability")));
+		GetAbilitySystemComponentFromActorInfo()->ApplyAbilityBlockAndCancelTags(AbilityTags, this, true, TagsToBlock, true, TagsToCancel);
+
 		DodgingMontageTask = UAbilityTask_PlayMontageAndWait::CreatePlayMontageAndWaitProxy(this, NAME_None, DodgeAnimation);
 
 		TScriptDelegate<FWeakObjectPtr> DodgingMontageScriptDelegate;
@@ -31,6 +41,8 @@ void UDodgeAbility::ExecutionLogic()
 		DodgingMontagetDelagate.Add(DodgingMontageScriptDelegate);
 		DodgingMontageTask->OnCompleted = DodgingMontagetDelagate;
 		DodgingMontageTask->Activate();
+
+		Cast<APlayerCharacter>(GetAvatarActorFromActorInfo())->GetCharacterMovement()->AddForce(FVector(300000000.f, 0.f, 0.f));
 
 		// Start dodge charge regen
 	}
@@ -64,6 +76,8 @@ void UDodgeAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle, con
 void UDodgeAbility::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo * ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
 {
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
+
+	GetAbilitySystemComponentFromActorInfo()->UnBlockAbilitiesWithTags(TagsToBlock);
 
 	if (TimeoutTask)
 	{
