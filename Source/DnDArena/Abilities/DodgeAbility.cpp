@@ -28,10 +28,7 @@ void UDodgeAbility::ExecutionLogic()
 		TimeoutTask->EndTask();
 
 		// After successful activation, should apply special cancel and blocks (block all abilities & cancel current ones)
-		FGameplayTagContainer TagsToCancel;
-		TagsToCancel.AddTag(FGameplayTag::RequestGameplayTag(FName("Ability.Skill")));		
-		TagsToBlock.AddTag(FGameplayTag::RequestGameplayTag(FName("Ability")));
-		GetAbilitySystemComponentFromActorInfo()->ApplyAbilityBlockAndCancelTags(AbilityTags, this, true, TagsToBlock, true, TagsToCancel);
+		GetAbilitySystemComponentFromActorInfo()->ApplyAbilityBlockAndCancelTags(AbilityTags, this, true, TagsToBlockDuringExecution, true, TagsToCancelDuringExecution);
 
 		DodgingMontageTask = UAbilityTask_PlayMontageAndWait::CreatePlayMontageAndWaitProxy(this, NAME_None, DodgeAnimation);
 
@@ -42,9 +39,26 @@ void UDodgeAbility::ExecutionLogic()
 		DodgingMontageTask->OnCompleted = DodgingMontagetDelagate;
 		DodgingMontageTask->Activate();
 
-		Cast<APlayerCharacter>(GetAvatarActorFromActorInfo())->GetCharacterMovement()->AddForce(FVector(300000000.f, 0.f, 0.f));
-
-		// Start dodge charge regen
+		FVector MovementDirection = FVector(1.f, 0.f, 0.f);
+		if (GetCurrentAbilitySpec()->InputID == static_cast<int>(AbilityInput::DodgeLeft))
+		{
+			MovementDirection = GetAvatarActorFromActorInfo()->GetActorRightVector() * -1.f;
+		}
+		else if (GetCurrentAbilitySpec()->InputID == static_cast<int>(AbilityInput::DodgeRight))
+		{
+			MovementDirection = GetAvatarActorFromActorInfo()->GetActorRightVector();
+		}
+		else if (GetCurrentAbilitySpec()->InputID == static_cast<int>(AbilityInput::DodgeForward))
+		{
+			MovementDirection = GetAvatarActorFromActorInfo()->GetActorForwardVector();
+		}
+		else if (GetCurrentAbilitySpec()->InputID == static_cast<int>(AbilityInput::DodgeBackward))
+		{
+			MovementDirection = GetAvatarActorFromActorInfo()->GetActorForwardVector() * -1.f;
+		}
+		
+		// Actual dodge movement
+		MovementTask = UAbilityTask_ApplyRootMotionConstantForce::ApplyRootMotionConstantForce(this, NAME_None, MovementDirection, MovementStrength, MovementDuration, true, MovementStrengthCurve, ERootMotionFinishVelocityMode::ClampVelocity, FVector(0.f, 0.f, 0.f), 0.f);
 	}
 	else
 	{
@@ -77,7 +91,7 @@ void UDodgeAbility::EndAbility(const FGameplayAbilitySpecHandle Handle, const FG
 {
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 
-	GetAbilitySystemComponentFromActorInfo()->UnBlockAbilitiesWithTags(TagsToBlock);
+	GetAbilitySystemComponentFromActorInfo()->UnBlockAbilitiesWithTags(TagsToBlockDuringExecution);
 
 	if (TimeoutTask)
 	{
@@ -90,5 +104,9 @@ void UDodgeAbility::EndAbility(const FGameplayAbilitySpecHandle Handle, const FG
 	if (DodgingMontageTask)
 	{
 		DodgingMontageTask->EndTask();
+	}
+	if (MovementTask)
+	{
+		MovementTask->EndTask();
 	}
 }

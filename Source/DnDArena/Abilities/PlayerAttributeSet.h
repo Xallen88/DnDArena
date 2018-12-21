@@ -17,59 +17,64 @@ class DNDARENA_API UPlayerAttributeSet : public UAttributeSet
 public:
 	// Defences
 	UPROPERTY(Category = "Attributes", EditAnywhere, BlueprintReadWrite, ReplicatedUsing = OnRep_Health)
-		FGameplayAttributeData Health;
+	FGameplayAttributeData Health;
 	UFUNCTION()
-		void OnRep_Health();
+	void OnRep_Health();
 
 	UPROPERTY(Category = "Attributes", EditAnywhere, BlueprintReadWrite, ReplicatedUsing = OnRep_MaxHealth)
-		FGameplayAttributeData MaxHealth;
+	FGameplayAttributeData MaxHealth;
 	UFUNCTION()
-		void OnRep_MaxHealth();
+	void OnRep_MaxHealth();
 
 	UPROPERTY(Category = "Attributes", EditAnywhere, BlueprintReadWrite)
-		FGameplayAttributeData FireResistance;
+	FGameplayAttributeData FireResistance;
 
 	UPROPERTY(Category = "Attributes", EditAnywhere, BlueprintReadWrite)
-		FGameplayAttributeData FrostResistance;
+	FGameplayAttributeData FrostResistance;
 
 	UPROPERTY(Category = "Attributes", EditAnywhere, BlueprintReadWrite)
-		FGameplayAttributeData LightningResistance;
+	FGameplayAttributeData LightningResistance;
 
 	UPROPERTY(Category = "Attributes", EditAnywhere, BlueprintReadWrite)
-		FGameplayAttributeData PhysicalResistance;
+	FGameplayAttributeData PhysicalResistance;
 
 	UPROPERTY(Category = "Attributes", EditAnywhere, BlueprintReadWrite)
-		FGameplayAttributeData PoisonResistance;
+	FGameplayAttributeData PoisonResistance;
 
 	UPROPERTY(Category = "Attributes", EditAnywhere, BlueprintReadWrite)
-		FGameplayAttributeData DarkResistance;
+	FGameplayAttributeData DarkResistance;
 
 	// Ability Related
 	UPROPERTY(Category = "Attributes", EditAnywhere, BlueprintReadWrite, ReplicatedUsing = OnRep_Resource)
-		FGameplayAttributeData Resource;
+	FGameplayAttributeData Resource;
 	UFUNCTION()
-		void OnRep_Resource();
+	void OnRep_Resource();
 
 	UPROPERTY(Category = "Attributes", EditAnywhere, BlueprintReadWrite, ReplicatedUsing = OnRep_MaxResource)
-		FGameplayAttributeData MaxResource;
+	FGameplayAttributeData MaxResource;
 	UFUNCTION()
-		void OnRep_MaxResource();
+	void OnRep_MaxResource();
 
 	UPROPERTY(Category = "Attributes", EditAnywhere, BlueprintReadWrite, ReplicatedUsing = OnRep_AttackSpeed)
-		FGameplayAttributeData AttackSpeed;
+	FGameplayAttributeData AttackSpeed;
 	UFUNCTION()
-		void OnRep_AttackSpeed();
+	void OnRep_AttackSpeed();
 
 	UPROPERTY(Category = "Attributes", EditAnywhere, BlueprintReadWrite, ReplicatedUsing = OnRep_CastSpeed)
-		FGameplayAttributeData CastSpeed;
+	FGameplayAttributeData CastSpeed;
 	UFUNCTION()
-		void OnRep_CastSpeed();
+	void OnRep_CastSpeed();
 
 	// Movement
 	UPROPERTY(Category = "Attributes", EditAnywhere, BlueprintReadWrite, ReplicatedUsing = OnRep_MovementSpeed)
-		FGameplayAttributeData MovementSpeed;
+	FGameplayAttributeData MovementSpeed;
 	UFUNCTION()
-		void OnRep_MovementSpeed();
+	void OnRep_MovementSpeed();
+
+	UPROPERTY(Category = "Attributes", EditAnywhere, BlueprintReadWrite, ReplicatedUsing = OnRep_DodgeCharges)
+	FGameplayAttributeData DodgeCharges;
+	UFUNCTION()
+	void OnRep_DodgeCharges();
 
 public:
 	void SetInitValue(FGameplayAttributeData& AttributeData, float InitValue);

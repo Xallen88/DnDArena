@@ -16,25 +16,41 @@ class DNDARENA_API UDodgeAbility : public UGameplayAbilityBase
 	
 private:
 	UFUNCTION()
-		void WaitTimeout();
+	void WaitTimeout();
 
 	UFUNCTION()
-		void DodgeComplete();
+	void DodgeComplete();
 
 protected:
-	FGameplayTagContainer TagsToBlock;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animation, meta = (AllowPrivateAccess = "true"))
-		UAnimMontage* DodgeAnimation;
+	UAnimMontage* DodgeAnimation;	
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement, meta = (AllowPrivateAccess = "true"))
+	float MovementDuration;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement, meta = (AllowPrivateAccess = "true"))
+	float MovementStrength;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement, meta = (AllowPrivateAccess = "true"))
+	UCurveFloat* MovementStrengthCurve;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = CustomTags, meta = (AllowPrivateAccess = "true"))
+	FGameplayTagContainer TagsToBlockDuringExecution;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = CustomTags, meta = (AllowPrivateAccess = "true"))
+	FGameplayTagContainer TagsToCancelDuringExecution;
 	
 	UPROPERTY()
-		class UAbilityTask_PlayMontageAndWait* DodgingMontageTask;
+	class UAbilityTask_PlayMontageAndWait* DodgingMontageTask;
 
 	UPROPERTY()
-		class UAbilityTask_WaitInputPress* DoubleTapWaitTask;
+	class UAbilityTask_WaitInputPress* DoubleTapWaitTask;
 
 	UPROPERTY()
-		class UAbilityTask_WaitDelay* TimeoutTask;
+	class UAbilityTask_WaitDelay* TimeoutTask;
+
+	UPROPERTY()
+	class UAbilityTask_ApplyRootMotionConstantForce* MovementTask;
 
 	virtual void ExecutionLogic() override;
 

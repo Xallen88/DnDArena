@@ -51,6 +51,7 @@ APlayerCharacter::APlayerCharacter()
 		PlayerAttributeSet->SetInitValue(PlayerAttributeSet->CastSpeed, 1.f);
 
 		PlayerAttributeSet->SetInitValue(PlayerAttributeSet->MovementSpeed, 600.f);
+		PlayerAttributeSet->SetInitValue(PlayerAttributeSet->DodgeCharges, 2.f);
 	}
 }
 
@@ -95,6 +96,22 @@ void APlayerCharacter::BeginPlay()
 			if (MeleeAbility2)
 			{
 				AbilitySystem->GiveAbility(FGameplayAbilitySpec(MeleeAbility2.GetDefaultObject(), 1, static_cast<int>(AbilityInput::MeleeAbility2)));
+			}
+			if (DodgeLeft)
+			{
+				AbilitySystem->GiveAbility(FGameplayAbilitySpec(DodgeLeft.GetDefaultObject(), 1, static_cast<int>(AbilityInput::DodgeLeft)));
+			}
+			if (DodgeRight)
+			{
+				AbilitySystem->GiveAbility(FGameplayAbilitySpec(DodgeRight.GetDefaultObject(), 1, static_cast<int>(AbilityInput::DodgeRight)));
+			}
+			if (DodgeForward)
+			{
+				AbilitySystem->GiveAbility(FGameplayAbilitySpec(DodgeLeft.GetDefaultObject(), 1, static_cast<int>(AbilityInput::DodgeForward)));
+			}
+			if (DodgeBackward)
+			{
+				AbilitySystem->GiveAbility(FGameplayAbilitySpec(DodgeLeft.GetDefaultObject(), 1, static_cast<int>(AbilityInput::DodgeBackward)));
 			}
 		}
 

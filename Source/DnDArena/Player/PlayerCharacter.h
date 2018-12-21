@@ -23,7 +23,11 @@ enum class AbilityInput : uint8
 	SpecialAbility,
 	SpecialAbility2,
 	MeleeAbility,
-	MeleeAbility2
+	MeleeAbility2,
+	DodgeLeft,
+	DodgeRight,
+	DodgeForward,
+	DodgeBackward
 };
 
 
@@ -54,31 +58,39 @@ public:
 private:
 	// Components
 	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-		USpringArmComponent* CameraArm;
+	USpringArmComponent* CameraArm;
 
 	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-		UCameraComponent* PlayerCamera;
+	UCameraComponent* PlayerCamera;
 
 	// Ability system
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Abilities, meta = (AllowPrivateAccess = "true"))
-		UAbilitySystemComponent* AbilitySystem;
+	UAbilitySystemComponent* AbilitySystem;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Abilities, meta = (AllowPrivateAccess = "true"))
-		TSubclassOf<UGameplayAbility> WeaponAbility;
+	TSubclassOf<UGameplayAbility> WeaponAbility;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Abilities, meta = (AllowPrivateAccess = "true"))
-		TSubclassOf<UGameplayAbility> WeaponAbility2;
+	TSubclassOf<UGameplayAbility> WeaponAbility2;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Abilities, meta = (AllowPrivateAccess = "true"))
-		TSubclassOf<UGameplayAbility> AreaAbility;
+	TSubclassOf<UGameplayAbility> AreaAbility;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Abilities, meta = (AllowPrivateAccess = "true"))
-		TSubclassOf<UGameplayAbility> AreaAbility2;
+	TSubclassOf<UGameplayAbility> AreaAbility2;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Abilities, meta = (AllowPrivateAccess = "true"))
-		TSubclassOf<UGameplayAbility> SpecialAbility;
+	TSubclassOf<UGameplayAbility> SpecialAbility;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Abilities, meta = (AllowPrivateAccess = "true"))
-		TSubclassOf<UGameplayAbility> SpecialAbility2;
+	TSubclassOf<UGameplayAbility> SpecialAbility2;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Abilities, meta = (AllowPrivateAccess = "true"))
-		TSubclassOf<UGameplayAbility> MeleeAbility;
+	TSubclassOf<UGameplayAbility> MeleeAbility;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Abilities, meta = (AllowPrivateAccess = "true"))
-		TSubclassOf<UGameplayAbility> MeleeAbility2;
+	TSubclassOf<UGameplayAbility> MeleeAbility2;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Abilities, meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<UGameplayAbility> DodgeLeft;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Abilities, meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<UGameplayAbility> DodgeRight;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Abilities, meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<UGameplayAbility> DodgeForward;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Abilities, meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<UGameplayAbility> DodgeBackward;
 
 	UPlayerAttributeSet* PlayerAttributeSet;
 
@@ -90,5 +102,5 @@ public:
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
 	UFUNCTION()
-		void UpdateMovement();
+	void UpdateMovement();
 };

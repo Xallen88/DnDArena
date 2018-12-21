@@ -42,6 +42,11 @@ void UPlayerAttributeSet::OnRep_MovementSpeed()
 	Cast<APlayerCharacter>(GetOwningAbilitySystemComponent()->GetAvatarActor())->UpdateMovement();
 }
 
+void UPlayerAttributeSet::OnRep_DodgeCharges()
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPlayerAttributeSet, DodgeCharges);
+}
+
 void UPlayerAttributeSet::SetInitValue(FGameplayAttributeData & AttributeData, float InitValue)
 {
 	AttributeData.SetBaseValue(InitValue);
@@ -62,6 +67,7 @@ void UPlayerAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& 
 	DOREPLIFETIME_CONDITION_NOTIFY(UPlayerAttributeSet, CastSpeed, COND_None, REPNOTIFY_Always);
 
 	DOREPLIFETIME_CONDITION_NOTIFY(UPlayerAttributeSet, MovementSpeed, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UPlayerAttributeSet, DodgeCharges, COND_None, REPNOTIFY_Always);
 }
 
 
