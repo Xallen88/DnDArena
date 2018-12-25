@@ -11,13 +11,11 @@
 
 void UDodgeAbility::WaitTimeout()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Timeout"));
 	CancelAbility(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo(), true);	
 }
 
 void UDodgeAbility::DodgeComplete()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Complete"));
 	EndAbility(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo(), true, false);
 }
 
@@ -91,7 +89,10 @@ void UDodgeAbility::EndAbility(const FGameplayAbilitySpecHandle Handle, const FG
 {
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 
-	GetAbilitySystemComponentFromActorInfo()->UnBlockAbilitiesWithTags(TagsToBlockDuringExecution);
+	if(!bWasCancelled)
+	{
+		GetAbilitySystemComponentFromActorInfo()->UnBlockAbilitiesWithTags(TagsToBlockDuringExecution);
+	}
 
 	if (TimeoutTask)
 	{

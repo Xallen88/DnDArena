@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "AbilitySystemInterface.h"
+#include "SlateBrush.h"
 #include "PlayerCharacter.generated.h"
 
 class UAbilitySystemComponent;
@@ -13,7 +14,7 @@ class UPlayerAttributeSet;
 class USpringArmComponent;
 class UCameraComponent;
 
-UENUM() 
+UENUM(BlueprintType) 
 enum class AbilityInput : uint8
 {
 	WeaponAbility,
@@ -103,4 +104,11 @@ public:
 
 	UFUNCTION()
 	void UpdateMovement();
+
+	// UI Elements
+	UFUNCTION(BlueprintCallable)
+	float GetRemainingCooldownPercent(AbilityInput InputID);
+
+	UFUNCTION(BlueprintCallable)
+	FSlateBrush GetAbilityIcon(AbilityInput InputID);
 };

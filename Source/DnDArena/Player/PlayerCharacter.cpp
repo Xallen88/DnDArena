@@ -10,6 +10,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Abilities/GameplayAbilityBase.h"
 
 
 // Sets default values
@@ -187,5 +188,31 @@ void APlayerCharacter::UpdateMovement()
 			CharacterMovement->SetMovementMode(EMovementMode::MOVE_Walking);
 		}
 	}	
+}
+
+float APlayerCharacter::GetRemainingCooldownPercent(AbilityInput InputID)
+{
+	FGameplayAbilitySpec* AbilitySpec = AbilitySystem->FindAbilitySpecFromInputID(static_cast<int>(InputID));
+	if (AbilitySpec)
+	{
+		float CooldownDuration;
+		float CooldownRemaining;
+		AbilitySpec->Ability->GetCooldownTimeRemainingAndDuration(AbilitySpec->Handle, AbilitySystem->AbilityActorInfo.Get(), CooldownRemaining, CooldownDuration);
+		if (CooldownDuration > 0) 
+		{
+			return CooldownRemaining/CooldownDuration;
+		}
+	}
+	return 0.0f;
+}
+
+FSlateBrush APlayerCharacter::GetAbilityIcon(AbilityInput InputID)
+{
+	FGameplayAbilitySpec* AbilitySpec = AbilitySystem->FindAbilitySpecFromInputID(static_cast<int>(InputID));
+	if (AbilitySpec)
+	{
+		return Cast<UGameplayAbilityBase>(AbilitySpec->Ability)->AbilityIcon;
+	}
+	return FSlateBrush();
 }
 

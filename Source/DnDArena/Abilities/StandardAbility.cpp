@@ -11,6 +11,7 @@
 void UStandardAbility::ActivateByInput()
 {
 	ReadyMontageTask->EndTask();
+	CommitAbilityCooldown(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo(), false);
 	ExecutionMontageTask->Activate();
 }	
 
@@ -89,20 +90,28 @@ void UStandardAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle, 
 	}
 
 	// Activate
-	if (CommitAbility(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo())) 
+	if(CheckCooldown(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo()))
 	{
-		if (CastingMontageTask)
+		if (CommitAbilityCost(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo()))
 		{
-			CastingMontageTask->Activate();
-		}
-		else if (ReadyMontageTask)
-		{
-			ReadyMontageTask->Activate();
-			ConfirmInputTask->Activate();
+			if (CastingMontageTask)
+			{
+				CastingMontageTask->Activate();
+			}
+			else if (ReadyMontageTask)
+			{
+				ReadyMontageTask->Activate();
+				ConfirmInputTask->Activate();
+			}
+			else
+			{
+				CommitAbilityCooldown(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo(), false);
+				ExecutionMontageTask->Activate();
+			}
 		}
 		else
 		{
-			ExecutionMontageTask->Activate();
+			CancelAbility(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo(), true);
 		}
 	}
 	else
@@ -144,6 +153,7 @@ void UStandardAbility::AbilityReady()
 	}
 	else
 	{
+		CommitAbilityCooldown(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo(), false);
 		ExecutionMontageTask->Activate();
 		CancelInputTask->EndTask();		
 	}

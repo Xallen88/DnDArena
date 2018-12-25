@@ -27,9 +27,6 @@ private:
 
 protected:
 	// Blueprint variables - These variables require a default value
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Display, meta = (AllowPrivateAccess = "true"))
-	FSlateBrush AbilityIcon;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Execution, meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<AAbilityActorBase> AbilityActorClass;
 
@@ -65,6 +62,9 @@ protected:
 	
 public:
 	virtual uint8 GetGameplayTaskDefaultPriority() const override { return FGameplayTasks::DefaultPriority; } // Couldn't compile without this
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Display, meta = (AllowPrivateAccess = "true"))
+	FSlateBrush AbilityIcon;
 	
 	UFUNCTION(BlueprintCallable, Category = Ability)
 	bool DoesAbilityTagsContain(FGameplayTag Tag) const;
