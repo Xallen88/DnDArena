@@ -31,7 +31,7 @@ APlayerCharacter::APlayerCharacter()
 	PlayerCamera->SetupAttachment(CameraArm, USpringArmComponent::SocketName);
 	PlayerCamera->RelativeLocation = FVector(-200.f, 0.f, 100.f);
 
-	AbilitySystem = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystem"));
+	AbilitySystem = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystem"));	
 
 	PlayerAttributeSet = CreateDefaultSubobject<UPlayerAttributeSet>(TEXT("AttributeSet"));
 
@@ -64,8 +64,11 @@ void APlayerCharacter::BeginPlay()
 	// Setup AbilitySystemComponent and ability inputs
 	if (AbilitySystem)
 	{	
+		AbilitySystem->OnGameplayEffectAppliedDelegateToSelf.AddUFunction(this, FName("OnEffectApplied"));
 		if (HasAuthority())
 		{
+			
+
 			if(WeaponAbility)			
 			{
 				AbilitySystem->GiveAbility(FGameplayAbilitySpec(WeaponAbility.GetDefaultObject(), 1, static_cast<int>(AbilityInput::WeaponAbility)));
@@ -214,5 +217,13 @@ FSlateBrush APlayerCharacter::GetAbilityIcon(AbilityInput InputID)
 		return Cast<UGameplayAbilityBase>(AbilitySpec->Ability)->AbilityIcon;
 	}
 	return FSlateBrush();
+}
+
+void APlayerCharacter::OnEffectApplied(UAbilitySystemComponent * ASC, const FGameplayEffectSpec & EffectSpec, FActiveGameplayEffectHandle EffectHandle)
+{
+	if (IsLocallyControlled())
+	{
+		
+	}
 }
 

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 #include "PlayerHUD.h"
+#include "GameplayEffectTypes.h"
 #include "ControllerBase.generated.h"
 
 /**
@@ -17,14 +18,16 @@ class DNDARENA_API AControllerBase : public APlayerController
 	
 public:
 	UFUNCTION(BlueprintGetter)
-		UPlayerHUD* GetPlayerHUD();
+	UPlayerHUD* GetPlayerHUD();
 
 	UFUNCTION(BlueprintSetter)
-		void SetPlayerHUD(UPlayerHUD* PHUD);
+	void SetPlayerHUD(UPlayerHUD* PHUD);
+
+	void AddBuffToHUD(FActiveGameplayEffectHandle EffectHandle);
 
 private:
 	UPROPERTY(BlueprintSetter=SetPlayerHUD)
-		UPlayerHUD* PlayerHUD;
+	UPlayerHUD* PlayerHUD;
 
 	
 	

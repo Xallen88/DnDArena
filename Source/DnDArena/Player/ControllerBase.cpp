@@ -11,3 +11,8 @@ void AControllerBase::SetPlayerHUD(UPlayerHUD* PHUD)
 {
 	PlayerHUD = PHUD;
 }
+
+void AControllerBase::AddBuffToHUD(FActiveGameplayEffectHandle EffectHandle)
+{
+	UE_LOG(LogTemp, Warning, TEXT("ADD BUFF TO HUD"));
+}

@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "AbilitySystemInterface.h"
+#include "GameplayEffect.h"
+#include "GameplayEffectTypes.h"
 #include "SlateBrush.h"
 #include "PlayerCharacter.generated.h"
 
@@ -111,4 +113,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	FSlateBrush GetAbilityIcon(AbilityInput InputID);
+
+	UFUNCTION()
+	void OnEffectApplied (UAbilitySystemComponent* ASC, const FGameplayEffectSpec& EffectSpec, FActiveGameplayEffectHandle EffectHandle);
 };

@@ -7,7 +7,7 @@
 
 void UMovementExecution::Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecutionParams, OUT FGameplayEffectCustomExecutionOutput& OutExecutionOutput) const
 {
-	APlayerCharacter* Player = Cast<APlayerCharacter>(ExecutionParams.GetSourceAbilitySystemComponent()->GetAvatarActor());
+	APlayerCharacter* Player = Cast<APlayerCharacter>(ExecutionParams.GetTargetAbilitySystemComponent()->GetAvatarActor());
 	if (!Player){ return; }
 
 	Player->UpdateMovement();
