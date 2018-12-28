@@ -29,12 +29,10 @@ void UDodgeAbility::ExecutionLogic()
 		GetAbilitySystemComponentFromActorInfo()->ApplyAbilityBlockAndCancelTags(AbilityTags, this, true, TagsToBlockDuringExecution, true, TagsToCancelDuringExecution);
 
 		DodgingMontageTask = UAbilityTask_PlayMontageAndWait::CreatePlayMontageAndWaitProxy(this, NAME_None, DodgeAnimation);
-
+		
 		TScriptDelegate<FWeakObjectPtr> DodgingMontageScriptDelegate;
 		DodgingMontageScriptDelegate.BindUFunction(this, FName("DodgeComplete"));
-		FMontageWaitSimpleDelegate DodgingMontagetDelagate;
-		DodgingMontagetDelagate.Add(DodgingMontageScriptDelegate);
-		DodgingMontageTask->OnCompleted = DodgingMontagetDelagate;
+		DodgingMontageTask->OnCompleted.Add(DodgingMontageScriptDelegate);
 		DodgingMontageTask->Activate();
 
 		FVector MovementDirection = FVector(1.f, 0.f, 0.f);
@@ -70,18 +68,14 @@ void UDodgeAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle, con
 
 	TScriptDelegate<FWeakObjectPtr> TimeoutScriptDelegate;
 	TimeoutScriptDelegate.BindUFunction(this, FName("WaitTimeout"));
-	FWaitDelayDelegate TimeoutDelagate;
-	TimeoutDelagate.Add(TimeoutScriptDelegate);
-	TimeoutTask->OnFinish = TimeoutDelagate;
+	TimeoutTask->OnFinish.Add(TimeoutScriptDelegate);
 	TimeoutTask->Activate();
 
 	DoubleTapWaitTask = UAbilityTask_WaitInputPress::WaitInputPress(this, false);
 
 	TScriptDelegate<FWeakObjectPtr> DoubleTapWaitScriptDelegate;
 	DoubleTapWaitScriptDelegate.BindUFunction(this, FName("ExecutionLogic"));
-	FInputPressDelegate DoubleTapWaitDelagate;
-	DoubleTapWaitDelagate.Add(DoubleTapWaitScriptDelegate);
-	DoubleTapWaitTask->OnPress = DoubleTapWaitDelagate;
+	DoubleTapWaitTask->OnPress.Add(DoubleTapWaitScriptDelegate);
 	DoubleTapWaitTask->Activate();
 }
 

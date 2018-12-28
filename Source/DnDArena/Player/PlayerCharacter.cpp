@@ -11,6 +11,7 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Abilities/GameplayAbilityBase.h"
+#include "Effects/GameplayEffectUIDataBasic.h"
 
 
 // Sets default values
@@ -63,12 +64,9 @@ void APlayerCharacter::BeginPlay()
 
 	// Setup AbilitySystemComponent and ability inputs
 	if (AbilitySystem)
-	{	
-		AbilitySystem->OnGameplayEffectAppliedDelegateToSelf.AddUFunction(this, FName("OnEffectApplied"));
+	{		
 		if (HasAuthority())
 		{
-			
-
 			if(WeaponAbility)			
 			{
 				AbilitySystem->GiveAbility(FGameplayAbilitySpec(WeaponAbility.GetDefaultObject(), 1, static_cast<int>(AbilityInput::WeaponAbility)));
@@ -120,6 +118,8 @@ void APlayerCharacter::BeginPlay()
 		}
 
 		AbilitySystem->InitAbilityActorInfo(this, this);
+
+		AbilitySystem->OnGameplayEffectAppliedDelegateToSelf.AddUObject(this, &APlayerCharacter::OnEffectApplied);
 	}
 }
 
@@ -223,7 +223,22 @@ void APlayerCharacter::OnEffectApplied(UAbilitySystemComponent * ASC, const FGam
 {
 	if (IsLocallyControlled())
 	{
-		
+		FGameplayTagContainer EffectTags;
+		EffectSpec.GetAllAssetTags(EffectTags);
+		if (EffectTags.HasTag(FGameplayTag::RequestGameplayTag(FName("Effect.Debuff"))))
+		{
+			FSlateBrush Icon = Cast<UGameplayEffectUIDataBasic>(EffectSpec.Def->UIData)->EffectIcon;
+			AddBuffWidget(EffectHandle, Icon, true);
+		}
+		if (EffectTags.HasTag(FGameplayTag::RequestGameplayTag(FName("Effect.Buff"))))
+		{
+			FSlateBrush Icon = Cast<UGameplayEffectUIDataBasic>(EffectSpec.Def->UIData)->EffectIcon;
+			AddBuffWidget(EffectHandle, Icon, false);
+		}
 	}
+}
+
+void APlayerCharacter::AddBuffWidget_Implementation(FActiveGameplayEffectHandle EffectHandle, FSlateBrush Icon, bool bDebuff)
+{
 }
 

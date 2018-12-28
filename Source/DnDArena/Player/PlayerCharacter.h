@@ -116,4 +116,7 @@ public:
 
 	UFUNCTION()
 	void OnEffectApplied (UAbilitySystemComponent* ASC, const FGameplayEffectSpec& EffectSpec, FActiveGameplayEffectHandle EffectHandle);
+
+	UFUNCTION(BlueprintNativeEvent)
+	void AddBuffWidget(FActiveGameplayEffectHandle EffectHandle, FSlateBrush Icon, bool bDebuff);
 };

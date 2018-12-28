@@ -23,8 +23,6 @@ public:
 	UFUNCTION(BlueprintSetter)
 	void SetPlayerHUD(UPlayerHUD* PHUD);
 
-	void AddBuffToHUD(FActiveGameplayEffectHandle EffectHandle);
-
 private:
 	UPROPERTY(BlueprintSetter=SetPlayerHUD)
 	UPlayerHUD* PlayerHUD;
