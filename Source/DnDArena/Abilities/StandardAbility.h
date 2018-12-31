@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbilityBase.h"
+#include "TargetArea.h"
 #include "StandardAbility.generated.h"
 
 /**
@@ -16,41 +17,50 @@ class DNDARENA_API UStandardAbility : public UGameplayAbilityBase
 
 private:
 	UFUNCTION()
-		void CancelByInput();
+	void CancelByInput();
 
 	UFUNCTION()
-		void ActivateByInput();
+	void ActivateByInput();
 
 	UFUNCTION()
-		void AbilityComplete();
+	void AbilityComplete();
 	
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animation, meta = (AllowPrivateAccess = "true"))
-		UAnimMontage* CastingAnimation;
+	UAnimMontage* CastingAnimation;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animation, meta = (AllowPrivateAccess = "true"))
-		UAnimMontage* ReadyAnimation;
+	UAnimMontage* ReadyAnimation;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animation, meta = (AllowPrivateAccess = "true"))
-		UAnimMontage* ExecutionAnimation;
+	UAnimMontage* ExecutionAnimation;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Targetting, meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<ATargetArea> TargetAreaClass;
 
 	UPROPERTY()
-		class UAbilityTask_PlayMontageAndWait* CastingMontageTask;
-	UPROPERTY()
-		class UAbilityTask_PlayMontageAndWait* ReadyMontageTask;
-	UPROPERTY()
-		class UAbilityTask_PlayMontageAndWait* ExecutionMontageTask;
+	ATargetArea* TargetAreaActor;
 
 	UPROPERTY()
-		class UAbilityTask_WaitGameplayEvent* ExecutionEvent;
+	class UAbilityTask_PlayMontageAndWait* CastingMontageTask;
+	UPROPERTY()
+	class UAbilityTask_PlayMontageAndWait* ReadyMontageTask;
+	UPROPERTY()
+	class UAbilityTask_PlayMontageAndWait* ExecutionMontageTask;
 
 	UPROPERTY()
-		class UAbilityTask_WaitConfirmCancel* ConfirmInputTask;
-	UPROPERTY()
-		class UAbilityTask_WaitCancel* CancelInputTask;
+	class UAbilityTask_WaitGameplayEvent* ExecutionEvent;
 
+	UPROPERTY()
+	class UAbilityTask_WaitConfirmCancel* ConfirmInputTask;
+	UPROPERTY()
+	class UAbilityTask_WaitCancel* CancelInputTask;
+	
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
 
 	virtual void EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled) override;
 	
 	UFUNCTION()
-		virtual void AbilityReady();
+	virtual void AbilityReady();
+
+	void SpawnTargetArea();
+
 };

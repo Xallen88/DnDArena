@@ -221,21 +221,26 @@ FSlateBrush APlayerCharacter::GetAbilityIcon(AbilityInput InputID)
 
 void APlayerCharacter::OnEffectApplied(UAbilitySystemComponent * ASC, const FGameplayEffectSpec & EffectSpec, FActiveGameplayEffectHandle EffectHandle)
 {
-	if (IsLocallyControlled())
+	if (HasAuthority())
 	{
 		FGameplayTagContainer EffectTags;
 		EffectSpec.GetAllAssetTags(EffectTags);
 		if (EffectTags.HasTag(FGameplayTag::RequestGameplayTag(FName("Effect.Debuff"))))
 		{
 			FSlateBrush Icon = Cast<UGameplayEffectUIDataBasic>(EffectSpec.Def->UIData)->EffectIcon;
-			AddBuffWidget(EffectHandle, Icon, true);
+			AddBuffWidget_Client(EffectHandle, Icon, true);
 		}
 		if (EffectTags.HasTag(FGameplayTag::RequestGameplayTag(FName("Effect.Buff"))))
 		{
 			FSlateBrush Icon = Cast<UGameplayEffectUIDataBasic>(EffectSpec.Def->UIData)->EffectIcon;
-			AddBuffWidget(EffectHandle, Icon, false);
+			AddBuffWidget_Client(EffectHandle, Icon, false);
 		}
 	}
+}
+
+void APlayerCharacter::AddBuffWidget_Client_Implementation(FActiveGameplayEffectHandle EffectHandle, FSlateBrush Icon, bool bDebuff)
+{
+	AddBuffWidget(EffectHandle, Icon, bDebuff);
 }
 
 void APlayerCharacter::AddBuffWidget_Implementation(FActiveGameplayEffectHandle EffectHandle, FSlateBrush Icon, bool bDebuff)

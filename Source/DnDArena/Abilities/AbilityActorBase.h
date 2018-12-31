@@ -37,5 +37,5 @@ protected:
 	FGameplayEffectContextHandle DamageContextHandle;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Effects, meta = (AllowPrivateAccess = "true"))
-		TArray<TSubclassOf<UGameplayEffect>> Effects;
+	TArray<TSubclassOf<UGameplayEffect>> Effects;
 };

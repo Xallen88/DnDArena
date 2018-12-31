@@ -119,4 +119,7 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent)
 	void AddBuffWidget(FActiveGameplayEffectHandle EffectHandle, FSlateBrush Icon, bool bDebuff);
+
+	UFUNCTION(Client, Reliable)
+	void AddBuffWidget_Client(FActiveGameplayEffectHandle EffectHandle, FSlateBrush Icon, bool bDebuff);
 };

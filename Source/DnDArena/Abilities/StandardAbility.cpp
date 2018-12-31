@@ -5,8 +5,8 @@
 #include "AbilityTask_WaitCancel.h"
 #include "AbilityTask_WaitConfirmCancel.h"
 #include "AbilityTask_WaitGameplayEvent.h"
-#include "AbilityTask.h"
-#include "GameplayTask.h"
+#include "AbilityTask_Tick.h"
+#include "AbilitySystemComponent.h"
 
 void UStandardAbility::ActivateByInput()
 {
@@ -27,73 +27,76 @@ void UStandardAbility::CancelByInput()
 
 void UStandardAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo * ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData * TriggerEventData)
 {
-	// Casting
-	if (DoesAbilityTagsContain(FGameplayTag::RequestGameplayTag(FName("Ability.Casted"))) && CastingAnimation)
-	{
-		CastingMontageTask = UAbilityTask_PlayMontageAndWait::CreatePlayMontageAndWaitProxy(this, NAME_None, CastingAnimation, 1.0);
-
-		TScriptDelegate<FWeakObjectPtr> MontageEndScriptDelegate;
-		MontageEndScriptDelegate.BindUFunction(this, FName("AbilityReady"));
-		FMontageWaitSimpleDelegate MontageEndDelegate;
-		MontageEndDelegate.Add(MontageEndScriptDelegate);
-		CastingMontageTask->OnCompleted = MontageEndDelegate;
-		CastingMontageTask->OnBlendOut = MontageEndDelegate;
-	}
-
-	// Ready
-	if (DoesAbilityTagsContain(FGameplayTag::RequestGameplayTag(FName("Ability.Readied"))) && ReadyAnimation)
-	{
-		ReadyMontageTask = UAbilityTask_PlayMontageAndWait::CreatePlayMontageAndWaitProxy(this, NAME_None, ReadyAnimation, 1.0);
-	}
-
-	// Execution
-	ExecutionMontageTask = UAbilityTask_PlayMontageAndWait::CreatePlayMontageAndWaitProxy(this, NAME_None, ExecutionAnimation, 1.0);
-
-	TScriptDelegate<FWeakObjectPtr> ExecutionMontageEndScriptDelegate;
-	ExecutionMontageEndScriptDelegate.BindUFunction(this, FName("AbilityComplete"));
-	FMontageWaitSimpleDelegate ExecutionMontageEndDelegate;
-	ExecutionMontageEndDelegate.Add(ExecutionMontageEndScriptDelegate);
-	ExecutionMontageTask->OnCompleted = ExecutionMontageEndDelegate;
-	ExecutionMontageTask->OnBlendOut = ExecutionMontageEndDelegate;
-
-
-	ExecutionEvent = UAbilityTask_WaitGameplayEvent::WaitGameplayEvent(this, FGameplayTag::RequestGameplayTag(FName("Ability.Event.Execute")));
-
-	TScriptDelegate<FWeakObjectPtr> ExecutionScriptDelegate;
-	ExecutionScriptDelegate.BindUFunction(this, FName("ExecutionLogic"));
-	FWaitGameplayEventDelegate ExecutionDelegate;
-	ExecutionDelegate.Add(ExecutionScriptDelegate);
-	ExecutionEvent->EventReceived = ExecutionDelegate;
-	ExecutionEvent->Activate();
-
-	// Cancel & confirm inputs
-	if (ReadyMontageTask || CastingMontageTask)
-	{
-		CancelInputTask = UAbilityTask_WaitCancel::WaitCancel(this);
-
-		TScriptDelegate<FWeakObjectPtr> CancelScriptDelegate;
-		CancelScriptDelegate.BindUFunction(this, FName("CancelByInput"));
-		FWaitCancelDelegate CancelDelegate;
-		CancelDelegate.Add(CancelScriptDelegate);
-		CancelInputTask->OnCancel = CancelDelegate;
-		CancelInputTask->Activate();
-	}
-	if (ReadyMontageTask)
-	{
-		ConfirmInputTask = UAbilityTask_WaitConfirmCancel::WaitConfirmCancel(this);
-
-		TScriptDelegate<FWeakObjectPtr> ConfirmScriptDelegate;
-		ConfirmScriptDelegate.BindUFunction(this, FName("ActivateByInput"));
-		FWaitConfirmCancelDelegate ConfirmDelegate;
-		ConfirmDelegate.Add(ConfirmScriptDelegate);
-		ConfirmInputTask->OnConfirm = ConfirmDelegate;
-	}
-
-	// Activate
+	// Check cooldown first
 	if(CheckCooldown(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo()))
-	{
+	{	
+		// Commit cost, regardless of execution
 		if (CommitAbilityCost(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo()))
 		{
+			// Casting
+			if (DoesAbilityTagsContain(FGameplayTag::RequestGameplayTag(FName("Ability.Casted"))) && CastingAnimation)
+			{
+				CastingMontageTask = UAbilityTask_PlayMontageAndWait::CreatePlayMontageAndWaitProxy(this, NAME_None, CastingAnimation, 1.0);
+
+				TScriptDelegate<FWeakObjectPtr> MontageEndScriptDelegate;
+				MontageEndScriptDelegate.BindUFunction(this, FName("AbilityReady"));
+				CastingMontageTask->OnCompleted.Add(MontageEndScriptDelegate);
+				CastingMontageTask->OnBlendOut.Add(MontageEndScriptDelegate);
+			}
+
+			// Ready
+			if (DoesAbilityTagsContain(FGameplayTag::RequestGameplayTag(FName("Ability.Readied"))) && ReadyAnimation)
+			{
+				ReadyMontageTask = UAbilityTask_PlayMontageAndWait::CreatePlayMontageAndWaitProxy(this, NAME_None, ReadyAnimation, 1.0);
+			}
+
+			// Execution
+			ExecutionMontageTask = UAbilityTask_PlayMontageAndWait::CreatePlayMontageAndWaitProxy(this, NAME_None, ExecutionAnimation, 1.0);
+
+			TScriptDelegate<FWeakObjectPtr> ExecutionMontageEndScriptDelegate;
+			ExecutionMontageEndScriptDelegate.BindUFunction(this, FName("AbilityComplete"));
+			ExecutionMontageTask->OnCompleted.Add(ExecutionMontageEndScriptDelegate);
+			ExecutionMontageTask->OnBlendOut.Add(ExecutionMontageEndScriptDelegate);
+
+
+			ExecutionEvent = UAbilityTask_WaitGameplayEvent::WaitGameplayEvent(this, FGameplayTag::RequestGameplayTag(FName("Ability.Event.Execute")));
+
+			TScriptDelegate<FWeakObjectPtr> ExecutionScriptDelegate;
+			ExecutionScriptDelegate.BindUFunction(this, FName("ExecutionLogic"));
+			ExecutionEvent->EventReceived.Add(ExecutionScriptDelegate);
+			ExecutionEvent->Activate();
+
+			// Cancel input
+			if (ReadyMontageTask || CastingMontageTask)
+			{
+				CancelInputTask = UAbilityTask_WaitCancel::WaitCancel(this);
+
+				TScriptDelegate<FWeakObjectPtr> CancelScriptDelegate;
+				CancelScriptDelegate.BindUFunction(this, FName("CancelByInput"));
+				CancelInputTask->OnCancel.Add(CancelScriptDelegate);
+				CancelInputTask->Activate();
+
+				// Target area logic
+				if (DoesAbilityTagsContain(FGameplayTag::RequestGameplayTag(FName("Ability.Area.Targetted"))) && IsLocallyControlled())
+				{
+					SpawnTargetArea();
+					if (TargetAreaActor)
+					{
+						TargetAreaActor->Ability = this;
+					}
+				}
+			}
+
+			// Confirm input
+			if (ReadyMontageTask)
+			{
+				ConfirmInputTask = UAbilityTask_WaitConfirmCancel::WaitConfirmCancel(this);
+
+				TScriptDelegate<FWeakObjectPtr> ConfirmScriptDelegate;
+				ConfirmScriptDelegate.BindUFunction(this, FName("ActivateByInput"));
+				ConfirmInputTask->OnConfirm.Add(ConfirmScriptDelegate);
+			}
+
 			if (CastingMontageTask)
 			{
 				CastingMontageTask->Activate();
@@ -140,6 +143,10 @@ void UStandardAbility::EndAbility(const FGameplayAbilitySpecHandle Handle, const
 	{
 		ConfirmInputTask->EndTask();
 	}
+	if (TargetAreaActor)
+	{
+		TargetAreaActor->Destroy();
+	}
 	ExecutionEvent->EndTask();
 	ExecutionMontageTask->EndTask();
 }
@@ -158,3 +165,11 @@ void UStandardAbility::AbilityReady()
 		CancelInputTask->EndTask();		
 	}
 }
+
+void UStandardAbility::SpawnTargetArea()
+{
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	TargetAreaActor = GetWorld()->SpawnActor<ATargetArea>(TargetAreaClass, GetAvatarActorFromActorInfo()->GetActorLocation(), GetAvatarActorFromActorInfo()->GetActorRotation(), SpawnParams);
+}
+

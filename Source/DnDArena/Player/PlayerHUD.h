@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "./Buffs/BuffWidget.h"
+#include "GameplayEffectTypes.h"
 #include "PlayerHUD.generated.h"
 
 /**
@@ -17,14 +18,26 @@ class DNDARENA_API UPlayerHUD : public UUserWidget
 	
 public:
 	UFUNCTION(BlueprintNativeEvent)
-		bool AddBuffWidget(FName BuffName, float EndTime);
+	bool AddBuffWidget(FName BuffName, float EndTime);
 
 	UFUNCTION(BlueprintNativeEvent)
-		bool UpdateBuffWidget(FName BuffName, float EndTime);
+	bool UpdateBuffWidget(FName BuffName, float EndTime);
 
 	UFUNCTION(BlueprintNativeEvent)
-		bool RemoveBuffWidget(FName BuffName);
+	bool RemoveBuffWidget(FName BuffName);
 
+	UFUNCTION(BlueprintCallable)
+	bool IsBuffActive (FActiveGameplayEffectHandle EffectHandle);
+
+	UFUNCTION(BlueprintCallable)
+	bool AddActiveBuff(FActiveGameplayEffectHandle EffectHandle);
+
+	UFUNCTION(BlueprintCallable)
+	bool RemoveActiveBuff(FActiveGameplayEffectHandle EffectHandle);
+
+protected:
+	UPROPERTY()
+	TArray<FActiveGameplayEffectHandle> ActiveBuffs;
 
 private:	
 	

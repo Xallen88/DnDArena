@@ -30,17 +30,20 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Execution, meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<AAbilityActorBase> AbilityActorClass;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Damage, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AbilitySpecs, meta = (AllowPrivateAccess = "true"))
+	float Range;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AbilitySpecs|Damage", meta = (AllowPrivateAccess = "true"))
 	float FireDamage;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Damage, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AbilitySpecs|Damage", meta = (AllowPrivateAccess = "true"))
 	float FrostDamage;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Damage, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AbilitySpecs|Damage", meta = (AllowPrivateAccess = "true"))
 	float LightningDamage;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Damage, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AbilitySpecs|Damage", meta = (AllowPrivateAccess = "true"))
 	float PhysicalDamage;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Damage, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AbilitySpecs|Damage", meta = (AllowPrivateAccess = "true"))
 	float PoisonDamage;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Damage, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AbilitySpecs|Damage", meta = (AllowPrivateAccess = "true"))
 	float DarkDamage;
 
 	// Variables
@@ -59,6 +62,11 @@ protected:
 
 	UFUNCTION()
 	FRotator GetAbilityActorSpawnRotation();
+
+	bool isFloor(FVector Normal);
+
+	bool isLOS(FVector Location);
+	
 	
 public:
 	virtual uint8 GetGameplayTaskDefaultPriority() const override { return FGameplayTasks::DefaultPriority; } // Couldn't compile without this
@@ -71,5 +79,5 @@ public:
 
 	virtual bool CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags = nullptr, const FGameplayTagContainer* TargetTags = nullptr, OUT FGameplayTagContainer* OptionalRelevantTags = nullptr) const override;
 
-	
+	FVector TraceTargetLocation();
 };
