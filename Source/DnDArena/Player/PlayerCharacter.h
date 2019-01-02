@@ -97,6 +97,8 @@ private:
 
 	UPlayerAttributeSet* PlayerAttributeSet;
 
+	bool bRedTeam;
+
 public:
 	UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
