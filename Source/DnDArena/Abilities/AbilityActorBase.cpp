@@ -2,6 +2,9 @@
 
 #include "AbilityActorBase.h"
 #include "Effects/DamageContext.h"
+#include "Engine/World.h"
+#include "Gamestates/VersusGamestate.h"
+#include "Player/PlayerCharacter.h"
 
 // Sets default values
 AAbilityActorBase::AAbilityActorBase()
@@ -9,6 +12,10 @@ AAbilityActorBase::AAbilityActorBase()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	SetReplicates(true);
+
+	DefaultScene = CreateDefaultSubobject<USceneComponent>(FName("DefaultScene"));
+	RootComponent = DefaultScene;
 }
 
 // Called when the game starts or when spawned
@@ -16,6 +23,7 @@ void AAbilityActorBase::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	BuildExclusionList();
 }
 
 // Called every frame
@@ -38,5 +46,13 @@ FGameplayEffectContextHandle AAbilityActorBase::GetDamageContextHandle()
 TArray<TSubclassOf<UGameplayEffect>> AAbilityActorBase::GetEffects()
 {
 	return Effects;
+}
+
+void AAbilityActorBase::BuildExclusionList()
+{
+	if (Instigator->IsA<APlayerCharacter>()) 
+	{
+		ExcludedPlayers = GetWorld()->GetGameState<AVersusGamestate>()->GetTeam(Cast<APlayerCharacter>(Instigator));
+	}	
 }
 

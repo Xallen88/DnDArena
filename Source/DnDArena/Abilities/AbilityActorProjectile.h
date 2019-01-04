@@ -4,6 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "Abilities/AbilityActorBase.h"
+#include "GameFramework/ProjectileMovementComponent.h"
+#include "Components/SphereComponent.h"
+#include "Components/StaticMeshComponent.h"
 #include "AbilityActorProjectile.generated.h"
 
 /**
@@ -17,12 +20,22 @@ class DNDARENA_API AAbilityActorProjectile : public AAbilityActorBase
 public:
 	AAbilityActorProjectile();
 
+private:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = AbilityActor, meta = (AllowPrivateAccess = "true"))
+	USphereComponent* CollisionSphere;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = AbilityActor, meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* StaticMesh;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = AbilityActor, meta = (AllowPrivateAccess = "true"))
+	UProjectileMovementComponent* MovementComponent;
+	
 protected:
-	class USphereComponent* CollisionSphere;
+	virtual void WorldCollision ();
 
-	class UStaticMeshComponent* StaticMesh;
+	virtual void PlayerCollision (AActor* OtherActor);
 
-	class UProjectileMovementComponent* MovementComponent;
+	virtual void OnImpact ();
 
 public:
 	UFUNCTION()

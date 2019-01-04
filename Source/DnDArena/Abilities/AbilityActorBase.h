@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "Effects/DamageContext.h"
 #include "GameplayEffect.h"
+#include "Components/SceneComponent.h"
 #include "AbilityActorBase.generated.h"
 
 UCLASS()
@@ -26,16 +27,25 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 
-public:
-	virtual void AddDamageContext(AActor* Instigator, AActor* DamageCauser, float FireDamage, float FrostDamage, float LightningDamage, float PhysicalDamage, float PoisonDamage, float DarkDamage);
-
-	FGameplayEffectContextHandle GetDamageContextHandle();
-
-	TArray<TSubclassOf<UGameplayEffect>> GetEffects();
+private:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = AbilityActor, meta = (AllowPrivateAccess = "true"))
+	USceneComponent* DefaultScene;
 
 protected:
 	FGameplayEffectContextHandle DamageContextHandle;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Effects, meta = (AllowPrivateAccess = "true"))
 	TArray<TSubclassOf<UGameplayEffect>> Effects;
+
+	TArray<class APlayerCharacter*> ExcludedPlayers;
+
+	void BuildExclusionList ();
+
+
+public:
+	virtual void AddDamageContext(AActor* Instigator, AActor* DamageCauser, float FireDamage, float FrostDamage, float LightningDamage, float PhysicalDamage, float PoisonDamage, float DarkDamage);
+
+	FGameplayEffectContextHandle GetDamageContextHandle();
+
+	TArray<TSubclassOf<UGameplayEffect>> GetEffects();
 };
