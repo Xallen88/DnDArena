@@ -33,7 +33,24 @@ AAbilityActorProjectile::AAbilityActorProjectile() : AAbilityActorBase()
 	{
 		MovementComponent->UpdatedComponent = RootComponent;
 		MovementComponent->ProjectileGravityScale = 0.f;
+	}	
+}
+
+void AAbilityActorProjectile::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	
+	if (HasAuthority() && FVector::Dist(GetActorLocation(), SpawnLocation) > ProjectileRange)
+	{
+		Destroy();
 	}
+}
+
+void AAbilityActorProjectile::BeginPlay()
+{
+	Super::BeginPlay();
+
+	SpawnLocation = GetActorLocation();
 }
 
 void AAbilityActorProjectile::WorldCollision()
@@ -42,7 +59,7 @@ void AAbilityActorProjectile::WorldCollision()
 	
 	if (HasAuthority())
 	{
-		OnImpact();
+		Activate();
 	}
 	
 	Destroy();
@@ -56,14 +73,10 @@ void AAbilityActorProjectile::PlayerCollision(AActor* OtherActor)
 	{
 		UGameplayStatics::ApplyPointDamage(OtherActor, 1.f, GetActorLocation(), FHitResult(), GetInstigatorController(), this, UDamageType::StaticClass());
 		
-		OnImpact();
+		Activate();
 	}
 
 	Destroy();
-}
-
-void AAbilityActorProjectile::OnImpact()
-{
 }
 
 void AAbilityActorProjectile::OnOverlapBegin(UPrimitiveComponent * OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
@@ -79,4 +92,9 @@ void AAbilityActorProjectile::OnOverlapBegin(UPrimitiveComponent * OverlappedCom
 	{
 		WorldCollision();
 	}
+}
+
+void AAbilityActorProjectile::SetRange_Implementation(float AbilityRange)
+{
+	ProjectileRange = AbilityRange;
 }

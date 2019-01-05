@@ -20,6 +20,11 @@ class DNDARENA_API AAbilityActorProjectile : public AAbilityActorBase
 public:
 	AAbilityActorProjectile();
 
+	virtual void Tick(float DeltaTime) override;
+
+protected:
+	virtual void BeginPlay() override;
+
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = AbilityActor, meta = (AllowPrivateAccess = "true"))
 	USphereComponent* CollisionSphere;
@@ -29,17 +34,20 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = AbilityActor, meta = (AllowPrivateAccess = "true"))
 	UProjectileMovementComponent* MovementComponent;
+
+	FVector SpawnLocation;
+
+	float ProjectileRange;
 	
 protected:
 	virtual void WorldCollision ();
 
 	virtual void PlayerCollision (AActor* OtherActor);
 
-	virtual void OnImpact ();
-
 public:
 	UFUNCTION()
 	void OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 	
-	
+	UFUNCTION(NetMulticast, Reliable)
+	void SetRange (float AbilityRange);
 };

@@ -2,6 +2,7 @@
 
 #include "GameplayAbilityBase.h"
 #include "AbilityActorBase.h"
+#include "AbilityActorProjectile.h"
 #include "AbilityTask_SpawnActor.h"
 #include "Player/PlayerCharacter.h"
 #include "Camera/CameraComponent.h"
@@ -40,7 +41,10 @@ void UGameplayAbilityBase::ExecutionLogic()
 
 void UGameplayAbilityBase::ProjectileExecution()
 {	
-	SpawnAbilityActor();
+	if (SpawnAbilityActor())
+	{
+		Cast<AAbilityActorProjectile>(AbilityActor)->SetRange(Range);
+	}
 }
 
 bool UGameplayAbilityBase::SpawnAbilityActor()

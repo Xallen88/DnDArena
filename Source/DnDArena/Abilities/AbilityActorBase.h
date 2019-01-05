@@ -26,6 +26,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	virtual void PostInitializeComponents() override;
+
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = AbilityActor, meta = (AllowPrivateAccess = "true"))
@@ -48,4 +50,6 @@ public:
 	FGameplayEffectContextHandle GetDamageContextHandle();
 
 	TArray<TSubclassOf<UGameplayEffect>> GetEffects();
+
+	virtual void Activate ();
 };

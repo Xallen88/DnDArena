@@ -53,42 +53,50 @@ void UDamageCalculation::Execute_Implementation(const FGameplayEffectCustomExecu
 	FAggregatorEvaluateParameters EvaluationParams;
 
 	FDamageContext* DamageContext = (FDamageContext*)(ExecutionParams.GetOwningSpec().GetContext().Get());
-	TMap<FString, float> DamageMatrix = DamageContext->GetDamageMatrix();
+	TArray<float> DamageMatrix;
+	if (DamageContext)
+	{
+		DamageMatrix = DamageContext->GetDamageMatrix();
+	}
+	else
+	{
+		return;
+	}
 		
 	float DamageValue = 0.f;
 	float DamageOut = 0.f;
 	float Resistance = 0.f;
-	if ((DamageValue = *DamageMatrix.Find(FString("Fire"))) > 0)
+	if ((DamageValue = DamageMatrix[0]) > 0)
 	{
 		ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(Attributes.FireResistanceDef, EvaluationParams, Resistance);
 		DamageOut += DamageDone(DamageValue, Resistance);
 		// Relevant damage specific code
 	}
-	if ((DamageValue = *DamageMatrix.Find(FString("Frost"))) > 0)
+	if ((DamageValue = DamageMatrix[1]) > 0)
 	{
 		ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(Attributes.FrostResistanceDef, EvaluationParams, Resistance);
 		DamageOut += DamageDone(DamageValue, Resistance);
 		// Relevant damage specific code
 	}
-	if ((DamageValue = *DamageMatrix.Find(FString("Lightning"))) > 0)
+	if ((DamageValue = DamageMatrix[2]) > 0)
 	{
 		ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(Attributes.LightningResistanceDef, EvaluationParams, Resistance);
 		DamageOut += DamageDone(DamageValue, Resistance);
 		// Relevant damage specific code
 	}
-	if ((DamageValue = *DamageMatrix.Find(FString("Physical"))) > 0)
+	if ((DamageValue = DamageMatrix[3]) > 0)
 	{
 		ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(Attributes.PhysicalResistanceDef, EvaluationParams, Resistance);
 		DamageOut += DamageDone(DamageValue, Resistance);
 		// Relevant damage specific code
 	}
-	if ((DamageValue = *DamageMatrix.Find(FString("Poison"))) > 0)
+	if ((DamageValue = DamageMatrix[4]) > 0)
 	{
 		ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(Attributes.PoisonResistanceDef, EvaluationParams, Resistance);
 		DamageOut += DamageDone(DamageValue, Resistance);
 		// Relevant damage specific code
 	}
-	if ((DamageValue = *DamageMatrix.Find(FString("Dark"))) > 0)
+	if ((DamageValue = DamageMatrix[5]) > 0)
 	{
 		ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(Attributes.DarkResistanceDef, EvaluationParams, Resistance);
 		DamageOut += DamageDone(DamageValue, Resistance);

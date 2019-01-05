@@ -12,7 +12,7 @@ void AAbilityActorProjectileAOE::WorldCollision()
 	{
 		UGameplayStatics::ApplyRadialDamage(Cast<UObject>(GetWorld()), 1.f, GetActorLocation(), Radius, UDamageType::StaticClass(), reinterpret_cast<TArray<AActor*>&>(ExcludedPlayers), this, GetInstigatorController(), true, ECollisionChannel::ECC_Visibility);
 		
-		OnImpact();
+		Activate();
 	}
 
 	Destroy();

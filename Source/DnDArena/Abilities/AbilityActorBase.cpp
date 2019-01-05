@@ -22,8 +22,6 @@ AAbilityActorBase::AAbilityActorBase()
 void AAbilityActorBase::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	BuildExclusionList();
 }
 
 // Called every frame
@@ -31,6 +29,13 @@ void AAbilityActorBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AAbilityActorBase::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	BuildExclusionList();
 }
 
 void AAbilityActorBase::AddDamageContext(AActor * Instigator, AActor * DamageCauser, float FireDamage, float FrostDamage, float LightningDamage, float PhysicalDamage, float PoisonDamage, float DarkDamage)
@@ -48,9 +53,13 @@ TArray<TSubclassOf<UGameplayEffect>> AAbilityActorBase::GetEffects()
 	return Effects;
 }
 
+void AAbilityActorBase::Activate()
+{
+}
+
 void AAbilityActorBase::BuildExclusionList()
 {
-	if (Instigator->IsA<APlayerCharacter>()) 
+	if (Instigator) 
 	{
 		ExcludedPlayers = GetWorld()->GetGameState<AVersusGamestate>()->GetTeam(Cast<APlayerCharacter>(Instigator));
 	}	

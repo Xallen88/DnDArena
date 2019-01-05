@@ -19,24 +19,24 @@ public:
 	FDamageContext(AActor* Instigator, AActor* DamageCauser, float FireDamage, float FrostDamage, float LightningDamage, float PhysicalDamage, float PoisonDamage, float DarkDamage)
 		: FGameplayEffectContext(Instigator, DamageCauser)
 	{
-		DamageMatrix.Add(FString("Fire"), FireDamage);
-		DamageMatrix.Add(FString("Frost"), FrostDamage);
-		DamageMatrix.Add(FString("Lightning"), LightningDamage);
-		DamageMatrix.Add(FString("Physical"), PhysicalDamage);
-		DamageMatrix.Add(FString("Poison"), PoisonDamage);
-		DamageMatrix.Add(FString("Dark"), DarkDamage);
+		DamageMatrix.Add(FireDamage);
+		DamageMatrix.Add(FrostDamage);
+		DamageMatrix.Add(LightningDamage);
+		DamageMatrix.Add(PhysicalDamage);
+		DamageMatrix.Add(PoisonDamage);
+		DamageMatrix.Add(DarkDamage);
 	}
 
 	~FDamageContext()
 	{
 	}
 
-	TMap<FString, float> GetDamageMatrix()
+	TArray<float> GetDamageMatrix()
 	{
 		return DamageMatrix;
 	}
 
 private:
-	TMap<FString, float> DamageMatrix;
+	TArray<float> DamageMatrix;
 
 };

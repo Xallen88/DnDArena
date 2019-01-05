@@ -30,7 +30,7 @@ void AVersusGamemode::SpawnCharacterTemp(class AControllerBase* Controller)
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 	
-	APlayerCharacter* Player = GetWorld()->SpawnActor<APlayerCharacter>(DefaultPawnClass, FindPlayerStart(Controller)->GetActorTransform().GetLocation(), FRotator(), SpawnParams);
+	APlayerCharacter* Player = GetWorld()->SpawnActor<APlayerCharacter>(DefaultPawnClass, LoadedControllers % 2 ? FVector(-600.f, -600.f, 205.f) : FVector(-970.f, 400.f, 205.f) , FRotator(0.f, 0.f, 0.f), SpawnParams);
 	
 	Controller->Possess(Player);
 
