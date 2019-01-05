@@ -92,7 +92,7 @@ void UBuffSystem::ClientAttachBuffWidget_Implementation(FName BuffName, float En
 	UPlayerHUD* PlayerHUD = Cast<AControllerBase>(Cast<APawn>(GetOwner())->GetController())->GetPlayerHUD();
 	if (PlayerHUD)
 	{
-		PlayerHUD->AddBuffWidget(BuffName, EndTime);
+		//PlayerHUD->AddBuffWidget(BuffName, EndTime);
 	}
 }
 
@@ -101,7 +101,7 @@ void UBuffSystem::ClientUpdateBuffWidget_Implementation(FName BuffName, float En
 	UPlayerHUD* PlayerHUD = Cast<AControllerBase>(Cast<APawn>(GetOwner())->GetController())->GetPlayerHUD();
 	if (PlayerHUD)
 	{
-		PlayerHUD->UpdateBuffWidget(BuffName, EndTime);
+		//PlayerHUD->UpdateBuffWidget(BuffName, EndTime);
 	}
 }
 
@@ -110,7 +110,7 @@ void UBuffSystem::ClientRemoveBuffWidget_Implementation(FName BuffName)
 	UPlayerHUD* PlayerHUD = Cast<AControllerBase>(Cast<APawn>(GetOwner())->GetController())->GetPlayerHUD();
 	if (PlayerHUD)
 	{
-		PlayerHUD->RemoveBuffWidget(BuffName);
+		//PlayerHUD->RemoveBuffWidget(BuffName);
 	}
 }
 
