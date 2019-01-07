@@ -3,7 +3,7 @@
 #include "GameplayAbilityBase.h"
 #include "AbilityActorBase.h"
 #include "AbilityActorProjectile.h"
-#include "AbilityTask_SpawnActor.h"
+#include "AbilityActorArea.h"
 #include "Player/PlayerCharacter.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -34,7 +34,10 @@ void UGameplayAbilityBase::ExecutionLogic()
 	}
 	if (DoesAbilityTagsContain(FGameplayTag::RequestGameplayTag(FName("Ability.Area"))))
 	{
-		SpawnAbilityActor();
+		if (SpawnAbilityActor())
+		{
+			AbilityActor->Activate();
+		}
 	}
 
 }

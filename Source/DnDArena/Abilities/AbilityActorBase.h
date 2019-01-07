@@ -47,6 +47,8 @@ protected:
 public:
 	virtual void AddDamageContext(AActor* Instigator, AActor* DamageCauser, float FireDamage, float FrostDamage, float LightningDamage, float PhysicalDamage, float PoisonDamage, float DarkDamage);
 
+	virtual void AddDamageContext(FGameplayEffectContextHandle DamageHandle);
+
 	FGameplayEffectContextHandle GetDamageContextHandle();
 
 	TArray<TSubclassOf<UGameplayEffect>> GetEffects();

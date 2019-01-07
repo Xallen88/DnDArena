@@ -13,6 +13,7 @@ AAbilityActorBase::AAbilityActorBase()
 	PrimaryActorTick.bCanEverTick = true;
 
 	SetReplicates(true);
+	bAlwaysRelevant = true;
 
 	DefaultScene = CreateDefaultSubobject<USceneComponent>(FName("DefaultScene"));
 	RootComponent = DefaultScene;
@@ -41,6 +42,11 @@ void AAbilityActorBase::PostInitializeComponents()
 void AAbilityActorBase::AddDamageContext(AActor * Instigator, AActor * DamageCauser, float FireDamage, float FrostDamage, float LightningDamage, float PhysicalDamage, float PoisonDamage, float DarkDamage)
 {
 	DamageContextHandle = FGameplayEffectContextHandle(new FDamageContext(Instigator, DamageCauser, FireDamage, FrostDamage, LightningDamage, PhysicalDamage, PoisonDamage, DarkDamage));
+}
+
+void AAbilityActorBase::AddDamageContext(FGameplayEffectContextHandle DamageHandle)
+{
+	DamageContextHandle = DamageHandle;
 }
 
 FGameplayEffectContextHandle AAbilityActorBase::GetDamageContextHandle()

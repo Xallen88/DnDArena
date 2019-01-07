@@ -26,6 +26,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Area, meta = (AllowPrivateAccess = "true"))
 	float Radius;
 
-
+public:
+	virtual void Activate () override;
 	
 };

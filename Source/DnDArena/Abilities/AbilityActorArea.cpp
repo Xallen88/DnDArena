@@ -4,6 +4,8 @@
 #include "Gamestates/VersusGamestate.h"
 #include "Engine/World.h"
 #include "Player/PlayerCharacter.h"
+#include "Kismet/GameplayStatics.h"
+#include "GameFramework/DamageType.h"
 
 
 FLinearColor AAbilityActorArea::ColourSwitch()
@@ -21,4 +23,9 @@ FLinearColor AAbilityActorArea::ColourSwitch()
 	return FLinearColor(1.f, 0.f, 0.f);
 }
 
+void AAbilityActorArea::Activate()
+{
+	// TODO: GameplayCues
 
+	UGameplayStatics::ApplyRadialDamage(Cast<UObject>(GetWorld()), 1.f, GetActorLocation(), Radius, UDamageType::StaticClass(), reinterpret_cast<TArray<AActor*>&>(ExcludedPlayers), this, GetInstigatorController(), true, ECollisionChannel::ECC_Visibility);
+}
