@@ -45,6 +45,8 @@ protected:
 
 
 public:
+	static AAbilityActorBase* SpawnAbilityActor(UWorld* World, TSubclassOf<AAbilityActorBase> AbilityActorClass, FVector Location, FRotator Rotation, APawn* Instigator, float AbilityRange=1000.f);
+
 	virtual void AddDamageContext(AActor* Instigator, AActor* DamageCauser, float FireDamage, float FrostDamage, float LightningDamage, float PhysicalDamage, float PoisonDamage, float DarkDamage);
 
 	virtual void AddDamageContext(FGameplayEffectContextHandle DamageHandle);

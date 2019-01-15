@@ -15,19 +15,17 @@ class DNDARENA_API AAbilityActorAreaTickSpawn : public AAbilityActorAreaTick
 	GENERATED_BODY()
 
 private:
-	FVector RandomLocationInCircle(float RadiusOffset = 0.f, float z = 0.f);
+	FVector RandomLocationInCircle(float RadiusOffset = 0.f, float z = 0.f);	
 	
 protected:
 	virtual void AreaTick () override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AreaTick, meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<AActor> SpawnableAbilityActor;
+	TSubclassOf<AAbilityActorBase> SpawnableAbilityActor;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AreaTick, meta = (AllowPrivateAccess = "true"))
 	float ZOffset;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AreaTick, meta = (AllowPrivateAccess = "true"))
 	float RadiusOffset;
-	
-	
 };

@@ -35,6 +35,8 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Targetting, meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<ATargetArea> TargetAreaClass;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Targetting, meta = (AllowPrivateAccess = "true"))
+	float TargetAreaDuration;
 
 	UPROPERTY()
 	ATargetArea* TargetAreaActor;
@@ -62,5 +64,8 @@ protected:
 	virtual void AbilityReady();
 
 	void SpawnTargetArea();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void SpawnTargetArea_Multicast(APawn* Instigator, FVector Location);
 
 };

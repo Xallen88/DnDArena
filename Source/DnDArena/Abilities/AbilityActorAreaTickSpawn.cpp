@@ -1,6 +1,7 @@
 // Copyright 2018-2019 Xallenia Studios. All Rights Reserved.
 
 #include "AbilityActorAreaTickSpawn.h"
+#include "AbilityActorProjectile.h"
 
 
 FVector AAbilityActorAreaTickSpawn::RandomLocationInCircle(float RadiusOffset, float z)
@@ -18,10 +19,7 @@ void AAbilityActorAreaTickSpawn::AreaTick()
 {
 	if (HasAuthority())
 	{
-		FActorSpawnParameters SpawnParams;
-		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-		SpawnParams.Instigator = GetInstigator();
-		AAbilityActorBase* SpawnedActor = GetWorld()->SpawnActor<AAbilityActorBase>(SpawnableAbilityActor, RandomLocationInCircle(RadiusOffset, ZOffset), GetActorRotation(), SpawnParams);
+		AAbilityActorBase* SpawnedActor = AAbilityActorBase::SpawnAbilityActor(GetWorld(), SpawnableAbilityActor, RandomLocationInCircle(RadiusOffset, ZOffset), GetActorRotation(), GetInstigator(), ZOffset+100.f);
 		if (SpawnedActor)
 		{
 			SpawnedActor->AddDamageContext(DamageContextHandle);

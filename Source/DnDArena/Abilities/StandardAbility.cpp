@@ -13,6 +13,15 @@ void UStandardAbility::ActivateByInput()
 	ReadyMontageTask->EndTask();
 	CommitAbilityCooldown(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo(), false);
 	ExecutionMontageTask->Activate();
+	if (TargetAreaActor)
+	{
+		TargetAreaActor->Destroy();
+	}
+	if (TargetAreaClass && GetCurrentActorInfo()->IsNetAuthority())
+	{
+		SpawnLocation = TraceTargetLocation();
+		SpawnTargetArea_Multicast(Cast<APawn>(GetAvatarActorFromActorInfo()), SpawnLocation);		
+	}
 }	
 
 void UStandardAbility::AbilityComplete()
@@ -77,7 +86,7 @@ void UStandardAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle, 
 				CancelInputTask->Activate();
 
 				// Target area logic
-				if (DoesAbilityTagsContain(FGameplayTag::RequestGameplayTag(FName("Ability.Area.Targetted"))) && IsLocallyControlled())
+				if (TargetAreaClass && IsLocallyControlled())
 				{
 					SpawnTargetArea();
 					if (TargetAreaActor)
@@ -170,6 +179,17 @@ void UStandardAbility::SpawnTargetArea()
 {
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	SpawnParams.Instigator = Cast<APawn>(GetAvatarActorFromActorInfo());
 	TargetAreaActor = GetWorld()->SpawnActor<ATargetArea>(TargetAreaClass, GetAvatarActorFromActorInfo()->GetActorLocation(), GetAvatarActorFromActorInfo()->GetActorRotation(), SpawnParams);
+}
+
+void UStandardAbility::SpawnTargetArea_Multicast_Implementation(APawn* Instigator, FVector Location)
+{
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	SpawnParams.Instigator = Instigator;
+	ATargetArea* Target = GetWorld()->SpawnActor<ATargetArea>(TargetAreaClass, Location, Instigator->GetActorRotation(), SpawnParams);
+	Target->SetActorTickEnabled(false);
+	Target->SetLifeSpan(TargetAreaDuration);
 }
 

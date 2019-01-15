@@ -1,0 +1,11 @@
+1. Create GameplayAbility class
+	a. Set all variables & icon
+	b. Add tags (don't forget block tags)
+	c. Set replication
+	d. Create/set cost & cooldown
+
+2. Create AbilityActor class(es)
+	a. Copy meshes/materials into folders & setup mesh
+	b. Set variables
+	c. Add effects (damage)
+

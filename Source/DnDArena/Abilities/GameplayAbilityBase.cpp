@@ -27,51 +27,26 @@ void UGameplayAbilityBase::RemoveMovementEffect()
 }
 
 void UGameplayAbilityBase::ExecutionLogic()
-{		
-	if (DoesAbilityTagsContain(FGameplayTag::RequestGameplayTag(FName("Ability.Projectile"))))
-	{ 		
-		ProjectileExecution();
-	}
-	if (DoesAbilityTagsContain(FGameplayTag::RequestGameplayTag(FName("Ability.Area"))))
-	{
-		if (SpawnAbilityActor())
-		{
-			AbilityActor->Activate();
-		}
-	}
-
-}
-
-void UGameplayAbilityBase::ProjectileExecution()
 {	
-	if (SpawnAbilityActor())
-	{
-		Cast<AAbilityActorProjectile>(AbilityActor)->SetRange(Range);
-	}
-}
-
-bool UGameplayAbilityBase::SpawnAbilityActor()
-{
 	if (GetCurrentActorInfo()->IsNetAuthority())
 	{
-		FActorSpawnParameters SpawnParams;
-		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-		SpawnParams.Instigator = Cast<APawn>(GetAvatarActorFromActorInfo());
-		AbilityActor = GetWorld()->SpawnActor<AAbilityActorBase>(AbilityActorClass, GetAbilityActorSpawnLocation(), GetAbilityActorSpawnRotation(), SpawnParams);
+		if (AbilityActorClass)
+		{
+			AbilityActor = AAbilityActorBase::SpawnAbilityActor(GetWorld(), AbilityActorClass, GetAbilityActorSpawnLocation(), GetAbilityActorSpawnRotation(), Cast<APawn>(GetAvatarActorFromActorInfo()), Range);
+		}
 		if (AbilityActor)
 		{
-			AbilityActor->AddDamageContext(SpawnParams.Instigator, AbilityActor, FireDamage, FrostDamage, LightningDamage, PhysicalDamage, PoisonDamage, DarkDamage);
-			return true;
+			AbilityActor->AddDamageContext(GetAvatarActorFromActorInfo(), AbilityActor, FireDamage, FrostDamage, LightningDamage, PhysicalDamage, PoisonDamage, DarkDamage);
 		}
 	}
-	return false;
 }
+
 
 FVector UGameplayAbilityBase::GetAbilityActorSpawnLocation()
 {
-	if (DoesAbilityTagsContain(FGameplayTag::RequestGameplayTag(FName("Ability.Area.Targetted"))))
+	if (SpawnLocation != FVector(0.f, 0.f, 0.f))
 	{
-		return TraceTargetLocation();
+		return SpawnLocation;
 	}
 	return GetAvatarActorFromActorInfo()->GetActorLocation();
 }

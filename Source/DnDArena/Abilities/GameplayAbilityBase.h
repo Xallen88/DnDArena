@@ -19,8 +19,6 @@ class DNDARENA_API UGameplayAbilityBase : public UGameplayAbility
 	GENERATED_BODY()
 
 private:
-	bool SpawnAbilityActor();
-
 	void ApplyMovementEffect();
 
 	void RemoveMovementEffect();
@@ -50,13 +48,12 @@ protected:
 	UPROPERTY()
 	AAbilityActorBase* AbilityActor;
 
+	FVector SpawnLocation;
+
 	// Functions
 	UFUNCTION(BlueprintCallable, Category = Ability)
 	virtual void ExecutionLogic();
-
-	UFUNCTION()
-	virtual void ProjectileExecution();
-	
+		
 	UFUNCTION()
 	FVector GetAbilityActorSpawnLocation();
 
